@@ -1,0 +1,180 @@
+{% extends "base.html" %}
+{% load static music_extras %}
+
+{% block title %}{{ artist.name }} | نواهای بیکلام{% endblock %}
+{% block meta_keywords %}{{ artist.name }}, آهنگ‌های {{ artist.name }}, موسیقی {{ artist.name }}, بی‌کلام {{ artist.name }}, دانلود آهنگ {{ artist.name }}{% endblock %}
+{% block og_title %}{{ artist.name }} | دانلود آهنگ‌های بی‌کلام{% endblock %}
+{% block og_description %}دانلود بهترین آهنگ‌های بی‌کلام بازسازی شده از {{ artist.name }} با کیفیت استودیویی ۳۲۰.{% endblock %}
+{% block og_image %}{{ artist.image }}{% endblock %}
+{% block twitter_image %}{{ artist.image }}{% endblock %}
+{% block og_type %}music.artist{% endblock %}
+
+{% block meta_description %}دانلود بهترین آهنگ‌های بی‌کلام بازسازی شده از {{ artist.name }} شامل {% for song in songs|slice:":5" %}{{ song.title }}{% if not forloop.last %}، {% endif %}{% endfor %} با کیفیت استودیویی ۳۲۰ و قیمت مناسب.{% endblock %}
+
+{% block schema %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "MusicGroup",
+  "name": "{{ artist.name }}",
+  "image": "{{ artist.image }}",
+  "description": "{{ artist.bio|default:artist.name|striptags|escapejs }}",
+  "url": "{{ request.build_absolute_uri }}"{% if songs %},
+  "track": [
+    {% for song in songs %}
+    {
+      "@type": "MusicRecording",
+      "name": "{{ song.title }}",
+      "url": "{{ request.scheme }}://{{ request.get_host }}{% url 'song_detail' song.id %}"
+    }{% if not forloop.last %},{% endif %}
+    {% endfor %}
+  ]{% endif %}
+}
+</script>
+{% with schema_comments=comments|slice:":15" %}
+{% if schema_comments %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  "itemListElement": [
+    {% for comment in schema_comments %}
+    {
+      "@type": "Comment",
+      "@id": "#comment-{{ comment.id }}",
+      "author": {
+        "@type": "Person",
+        "name": "{{ comment.name|escapejs }}"
+      },
+      "dateCreated": "{{ comment.created_at|date:'c' }}",
+      "text": "{{ comment.text|truncatewords:50|escapejs }}"
+      {% if comment.rating %}
+      ,"reviewRating": {
+        "@type": "Rating",
+        "ratingValue": "{{ comment.rating }}",
+        "bestRating": "5"
+      }
+      {% endif %}
+    }{% if comment.replies.all %},
+    {% for reply in comment.replies.all %}
+    {
+      "@type": "Comment",
+      "author": {
+        "@type": "Person",
+        "name": "{{ reply.name|escapejs }}"
+      },
+      "dateCreated": "{{ reply.created_at|date:'c' }}",
+      "text": "{{ reply.text|truncatewords:50|escapejs }}",
+      "parentItem": {
+        "@id": "#comment-{{ comment.id }}"
+      }
+    }{% if not forloop.parentloop.last or not forloop.last %},{% endif %}
+    {% endfor %}
+    {% elif not forloop.last %},
+    {% endif %}
+    {% endfor %}
+  ]
+}
+</script>
+{% endif %}
+{% endwith %}
+{% endblock %}
+
+{% block content %}
+
+<section class="relative min-h-[50vh] flex items-center pt-24 overflow-hidden">
+  <div class="absolute inset-0 bg-gradient-to-b from-slate-950 via-rose-950/30 to-slate-950 z-0"></div>
+  <div class="absolute top-1/3 left-1/2 -translate-x-1/2 w-[500px] h-[500px] rounded-full blur-[120px] bg-rose-600/10 z-0"></div>
+  <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+    <!-- Breadcrumb -->
+    <nav class="flex items-center gap-1.5 text-xs text-slate-500 mb-4" aria-label="مسیر راهنما">
+      <a href="/" class="hover:text-purple-400 transition-colors flex items-center gap-1"><i data-lucide="home" class="w-3 h-3"></i></a>
+      <i data-lucide="chevron-left" class="w-3 h-3 text-slate-600"></i>
+      <a href="{% url 'artist_list' %}" class="hover:text-purple-400 transition-colors">هنرمندان</a>
+      <i data-lucide="chevron-left" class="w-3 h-3 text-slate-600"></i>
+      <span class="text-slate-300">{{ artist.name }}</span>
+    </nav>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {"@type": "ListItem", "position": 1, "name": "خانه", "item": "{{ request.scheme }}://{{ request.get_host }}/"},
+        {"@type": "ListItem", "position": 2, "name": "هنرمندان", "item": "{{ request.scheme }}://{{ request.get_host }}{% url 'artist_list' %}"},
+        {"@type": "ListItem", "position": 3, "name": "{{ artist.name }}", "item": "{{ request.build_absolute_uri }}"}
+      ]
+    }
+    </script>
+    <div class="flex flex-col md:flex-row items-center gap-10">
+      <div class="relative" data-aos="fade-left">
+        <div class="w-48 h-48 md:w-56 md:h-56 rounded-full p-1 bg-gradient-to-tr from-rose-600 to-purple-600">
+          <div class="w-full h-full rounded-full overflow-hidden border-4 border-slate-950">
+            <img src="{{ artist.image }}" alt="{{ artist.name }}" class="w-full h-full object-cover">
+          </div>
+        </div>
+        <div class="absolute -bottom-2 -right-2 bg-slate-900 text-sm text-slate-300 px-3 py-1 rounded-full border border-white/10">{{ artist.songs.count }} اثر</div>
+      </div>
+      <div class="flex-1 text-center md:text-right" data-aos="fade-right">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-xs text-slate-300 mb-4">
+          <i data-lucide="mic-vocal" class="w-3 h-3 text-rose-400"></i>هنرمند
+        </div>
+        <h1 class="text-3xl md:text-5xl font-extrabold mb-4">{{ artist.name }} | آثار و بیوگرافی</h1>
+        <div class="text-slate-400 leading-relaxed max-w-2xl ck-content">{{ artist.bio|default:'آثار این هنرمند توسط نواهای بیکلام بازسازی و به صورت بیکلام منتشر شده است.'|safe }}</div>
+        {% with share_url=request.build_absolute_uri share_text=artist.name %}
+          {% include "include_share.html" %}
+        {% endwith %}
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="py-20 border-t border-white/5">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center gap-3 mb-10" data-aos="fade-left">
+      <div class="p-2 rounded-lg bg-rose-500/10 text-rose-400"><i data-lucide="music" class="w-5 h-5"></i></div>
+      <h2 class="text-2xl md:text-3xl font-bold">آهنگ‌های {{ artist.name }}</h2>
+    </div>
+    {% if songs %}
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      {% for song in songs %}
+      <div class="group relative bg-white/5 border border-white/10 rounded-2xl overflow-hidden hover:-translate-y-1 transition-all duration-300 hover:shadow-2xl hover:shadow-purple-500/10 card-glow" data-aos="fade-up">
+        <div class="relative aspect-video overflow-hidden">
+          <img src="{{ song.cover.url }}" alt="{{ song.title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy">
+          <button data-preview-url="{% if song.preview_url %}{{ song.preview_url.url }}{% endif %}" onclick="playPreview('{{ song.title|escapejs }}','{{ song.artist.name|escapejs }}','{{ song.cover.url|escapejs }}','{% if song.preview_url %}{{ song.preview_url.url|escapejs }}{% endif %}')" class="play-btn absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center cursor-pointer">
+            <span class="p-3 rounded-full bg-white/20 backdrop-blur hover:bg-white/30 transition-colors"><i data-lucide="play" class="play-icon w-5 h-5 fill-current"></i></span>
+          </button>
+        </div>
+        <div class="p-5">
+          <h3 class="text-lg font-bold mb-1">{{ song.title }}</h3>
+          <p class="text-sm text-slate-400 mb-2">{{ song.artist.name }}</p>
+          <div class="flex items-center gap-3 text-xs text-slate-500 mb-3">
+            <span class="flex items-center gap-1"><i data-lucide="eye" class="w-3 h-3"></i>{{ song.views_count }}</span>
+            <span class="flex items-center gap-1"><i data-lucide="shopping-cart" class="w-3 h-3"></i>{{ song.purchase_count }}</span>
+          </div>
+          <div class="flex items-center justify-between">
+            <span class="text-purple-300 font-bold text-sm">{{ song.price|price_format }}</span>
+            <div class="flex gap-2">
+              <a href="{% url 'song_detail' song.id %}" class="px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-slate-400 text-xs hover:bg-white/10 transition-colors">جزئیات</a>
+              <button onclick="addToCart({{ song.id }},'{{ song.title|escapejs }}','{{ song.artist.name|escapejs }}','{{ song.cover.url|escapejs }}',{{ song.price }})" class="px-3 py-1.5 rounded-lg bg-purple-600/20 text-purple-300 text-xs font-medium hover:bg-purple-600 hover:text-white transition-colors border border-purple-500/30 cursor-pointer">خرید</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <div class="text-center py-16">
+      <i data-lucide="music" class="w-16 h-16 text-slate-600 mx-auto mb-4"></i>
+      <p class="text-slate-400">هنوز آهنگی از این هنرمند منتشر نشده است.</p>
+    </div>
+    {% endif %}
+  </div>
+</section>
+
+{% with content_type_id=content_type_id object_id=object_id %}
+  {% include "include_comments.html" %}
+{% endwith %}
+
+{% endblock %}
+
+{% block page_data %}{% endblock %}

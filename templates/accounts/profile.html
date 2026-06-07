@@ -1,0 +1,334 @@
+{% extends "base.html" %}
+{% load static music_extras %}
+
+{% block title %}پنل کاربری | نواهای بیکلام{% endblock %}
+
+{% block content %}
+
+<section class="relative min-h-screen pt-24 overflow-hidden">
+  <div class="absolute inset-0 bg-gradient-to-b from-slate-950 via-indigo-950/30 to-slate-950 z-0"></div>
+  <div class="absolute top-1/3 left-1/2 -translate-x-1/2 w-[600px] h-[600px] rounded-full blur-[120px] bg-purple-600/10 z-0"></div>
+  <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+      <!-- Sidebar -->
+      <div class="lg:col-span-1">
+        <div class="bg-white/5 border border-white/10 rounded-2xl p-6 sticky top-24" data-aos="fade-left">
+          <div class="flex flex-col items-center text-center mb-6">
+            <div class="w-20 h-20 rounded-full bg-gradient-to-br from-purple-600 to-indigo-600 flex items-center justify-center text-white font-bold text-2xl mb-4">{{ user.first_name|first|default:user.phone.0 }}</div>
+            <h2 class="text-lg font-bold">{{ user.get_full_name|default:user.phone }}</h2>
+            <p class="text-sm text-slate-400" dir="ltr">{{ user.phone }}</p>
+          </div>
+          <hr class="border-white/10 mb-4">
+          <nav class="space-y-1">
+            <a href="#info" class="flex items-center gap-3 py-3 px-4 rounded-xl bg-purple-600/20 text-purple-300 border border-purple-500/20"><i data-lucide="user" class="w-5 h-5"></i>اطلاعات حساب</a>
+            <a href="#subscription" class="flex items-center gap-3 py-3 px-4 rounded-xl hover:bg-white/5 text-slate-200 hover:text-purple-400 transition-colors"><i data-lucide="crown" class="w-5 h-5"></i>اشتراک من</a>
+            <a href="#songs" class="flex items-center gap-3 py-3 px-4 rounded-xl hover:bg-white/5 text-slate-200 hover:text-purple-400 transition-colors"><i data-lucide="headphones" class="w-5 h-5"></i>آهنگ‌های من</a>
+            <a href="#albums" class="flex items-center gap-3 py-3 px-4 rounded-xl hover:bg-white/5 text-slate-200 hover:text-purple-400 transition-colors"><i data-lucide="album" class="w-5 h-5"></i>آلبوم‌های من</a>
+            <a href="#wishlist" class="flex items-center gap-3 py-3 px-4 rounded-xl hover:bg-white/5 text-slate-200 hover:text-red-400 transition-colors"><i data-lucide="heart" class="w-5 h-5"></i>علاقه‌مندی‌ها</a>
+            <a href="#orders" class="flex items-center gap-3 py-3 px-4 rounded-xl hover:bg-white/5 text-slate-200 hover:text-purple-400 transition-colors"><i data-lucide="shopping-bag" class="w-5 h-5"></i>سفارش‌های من</a>
+          </nav>
+        </div>
+      </div>
+
+      <!-- Main Content -->
+      <div class="lg:col-span-2 space-y-8">
+
+        <!-- User Info -->
+        <div id="info" class="bg-white/5 border border-white/10 rounded-2xl p-6" data-aos="fade-right">
+          <h3 class="text-xl font-bold mb-6 flex items-center gap-2"><i data-lucide="user" class="w-5 h-5 text-purple-400"></i>اطلاعات حساب</h3>
+          <form method="post">
+            {% csrf_token %}
+            {% if error %}
+            <div class="mb-4 px-4 py-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm">{{ error }}</div>
+            {% endif %}
+            {% if success %}
+            <div class="mb-4 px-4 py-3 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-sm">{{ success }}</div>
+            {% endif %}
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label class="block text-xs text-slate-500 mb-1">شماره موبایل</label>
+                <input type="text" value="{{ user.phone }}" disabled class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-slate-400 cursor-not-allowed" dir="ltr">
+              </div>
+              <div>
+                <label class="block text-xs text-slate-500 mb-1">نام</label>
+                <input type="text" name="first_name" value="{{ user.first_name }}" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-slate-200 focus:border-purple-500 focus:outline-none transition-colors" placeholder="نام خود را وارد کنید">
+              </div>
+              <div>
+                <label class="block text-xs text-slate-500 mb-1">نام خانوادگی</label>
+                <input type="text" name="last_name" value="{{ user.last_name }}" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-slate-200 focus:border-purple-500 focus:outline-none transition-colors" placeholder="نام خانوادگی خود را وارد کنید">
+              </div>
+              <div>
+                <label class="block text-xs text-slate-500 mb-1">ایمیل</label>
+                <input type="email" name="email" value="{{ user.email|default:'' }}" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-slate-200 focus:border-purple-500 focus:outline-none transition-colors" placeholder="example@mail.com">
+              </div>
+              <div>
+                <label class="block text-xs text-slate-500 mb-1">تاریخ عضویت</label>
+                <p class="text-sm font-medium pt-2.5">{{ user.date_joined|to_jalali }}</p>
+              </div>
+
+            </div>
+            <div class="mt-6 pt-4 border-t border-white/10 flex justify-end">
+              <button type="submit" class="px-6 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-medium transition-all">ذخیره تغییرات</button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Subscription -->
+        <div id="subscription" class="bg-white/5 border border-white/10 rounded-2xl p-6" data-aos="fade-right">
+          <h3 class="text-xl font-bold mb-6 flex items-center gap-2"><i data-lucide="crown" class="w-5 h-5 text-amber-400"></i>اشتراک من</h3>
+          {% if active_subscription %}
+          <div class="bg-gradient-to-br from-amber-600/10 to-orange-600/10 border border-amber-500/20 rounded-xl p-6">
+            <div class="flex items-center gap-3 mb-4">
+              <div class="w-12 h-12 rounded-full bg-gradient-to-br from-amber-600 to-orange-600 flex items-center justify-center shadow-lg shadow-amber-500/20">
+                <i data-lucide="crown" class="w-6 h-6 text-white"></i>
+              </div>
+              <div>
+                <p class="text-lg font-bold">{{ active_subscription.plan.title }}</p>
+                <p class="text-xs text-slate-400">{{ active_subscription.plan.description }}</p>
+              </div>
+            </div>
+            <div class="grid grid-cols-2 gap-4 text-center">
+              <div class="bg-white/5 rounded-xl p-3">
+                <p class="text-xs text-slate-400 mb-1">اعتبار تا</p>
+                <p class="text-sm font-bold text-amber-300">{{ active_subscription.end_date|to_jalali }}</p>
+              </div>
+              <div class="bg-white/5 rounded-xl p-3">
+                <p class="text-xs text-slate-400 mb-1">دانلود باقی‌مانده</p>
+                <p class="text-sm font-bold text-amber-300">{{ active_subscription.remaining_downloads }}</p>
+              </div>
+            </div>
+          </div>
+          {% elif last_subscription %}
+          <div class="text-center py-8">
+            <div class="w-16 h-16 mx-auto mb-4 rounded-full {% if subscription_status == 'downloads_exhausted' %}bg-red-500/20{% else %}bg-slate-700{% endif %} flex items-center justify-center">
+              <i data-lucide="{% if subscription_status == 'downloads_exhausted' %}download{% else %}calendar{% endif %}" class="w-8 h-8 {% if subscription_status == 'downloads_exhausted' %}text-red-400{% else %}text-slate-500{% endif %}"></i>
+            </div>
+            <p class="text-slate-300 font-bold mb-1">{{ last_subscription.plan.title }}</p>
+            {% if subscription_status == 'expired' %}
+            <p class="text-sm text-slate-500 mb-4">اشتراک شما در تاریخ {{ last_subscription.end_date|to_jalali }} به پایان رسیده است</p>
+            {% elif subscription_status == 'downloads_exhausted' %}
+            <p class="text-sm text-red-400 mb-4">اشتراک شما به دلیل اتمام تعداد دانلودها به پایان رسید</p>
+            {% else %}
+            <p class="text-sm text-slate-500 mb-4">اشتراک شما غیرفعال شده است</p>
+            {% endif %}
+            <a href="{% url 'home' %}#subscriptions" class="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-amber-600 to-orange-600 text-white font-medium transition-all hover:shadow-lg hover:shadow-amber-500/25">تمدید اشتراک</a>
+          </div>
+          {% else %}
+          <div class="text-center py-8">
+            <i data-lucide="crown" class="w-16 h-16 text-slate-600 mx-auto mb-4"></i>
+            <p class="text-slate-400 mb-4">اشتراک فعالی ندارید</p>
+            <a href="{% url 'home' %}#subscriptions" class="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-amber-600 to-orange-600 text-white font-medium transition-all hover:shadow-lg hover:shadow-amber-500/25">خرید اشتراک</a>
+          </div>
+          {% endif %}
+        </div>
+
+        <!-- Wishlist -->
+        <div id="wishlist" class="bg-white/5 border border-white/10 rounded-2xl p-6" data-aos="fade-right">
+          <h3 class="text-xl font-bold mb-6 flex items-center gap-2"><i data-lucide="heart" class="w-5 h-5 text-red-400"></i>علاقه‌مندی‌ها</h3>
+          {% if wishlist_items %}
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {% for item in wishlist_items %}
+            <a href="{% url 'song_detail' item.song.id %}" class="flex items-center gap-4 p-4 rounded-xl bg-white/5 hover:bg-white/10 border border-white/5 hover:border-red-500/30 transition-all group">
+              <div class="w-14 h-14 rounded-xl overflow-hidden flex-shrink-0">
+                <img src="{{ item.song.cover.url }}" alt="{{ item.song.title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+              </div>
+              <div class="flex-1 min-w-0">
+                <p class="text-sm font-bold truncate">{{ item.song.title }}</p>
+                <p class="text-xs text-slate-400 truncate">{{ item.song.artist.name }}</p>
+              </div>
+              <i data-lucide="chevron-left" class="w-4 h-4 text-slate-500 group-hover:text-red-400 transition-colors flex-shrink-0"></i>
+            </a>
+            {% endfor %}
+          </div>
+          {% else %}
+          <div class="text-center py-12">
+            <i data-lucide="heart" class="w-16 h-16 text-slate-600 mx-auto mb-4"></i>
+            <p class="text-slate-400">هنوز هیچ آهنگی به علاقه‌مندی‌ها اضافه نکرده‌اید</p>
+            <a href="{% url 'home' %}#latest" class="inline-flex items-center gap-2 mt-4 px-6 py-3 rounded-xl bg-red-600 hover:bg-red-500 text-white font-medium transition-all">مشاهده آهنگ‌ها</a>
+          </div>
+          {% endif %}
+        </div>
+
+        <!-- My Songs -->
+        <div id="songs" class="bg-white/5 border border-white/10 rounded-2xl p-6" data-aos="fade-right">
+          <h3 class="text-xl font-bold mb-6 flex items-center gap-2"><i data-lucide="headphones" class="w-5 h-5 text-purple-400"></i>آهنگ‌های من</h3>
+          {% if purchased_songs %}
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {% for song in purchased_songs %}
+            <a href="{% url 'song_detail' song.id %}" class="flex items-center gap-4 p-4 rounded-xl bg-white/5 hover:bg-white/10 border border-white/5 hover:border-purple-500/30 transition-all group">
+              <div class="w-14 h-14 rounded-xl overflow-hidden flex-shrink-0">
+                <img src="{{ song.cover.url }}" alt="{{ song.title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+              </div>
+              <div class="flex-1 min-w-0">
+                <p class="text-sm font-bold truncate">{{ song.title }}</p>
+                <p class="text-xs text-slate-400 truncate">{{ song.artist.name }}</p>
+              </div>
+              <i data-lucide="chevron-left" class="w-4 h-4 text-slate-500 group-hover:text-purple-400 transition-colors flex-shrink-0"></i>
+            </a>
+            {% endfor %}
+          </div>
+          {% else %}
+          <div class="text-center py-12">
+            <i data-lucide="music" class="w-16 h-16 text-slate-600 mx-auto mb-4"></i>
+            <p class="text-slate-400">هنوز هیچ آهنگی خریداری نکرده‌اید</p>
+            <a href="{% url 'home' %}#latest" class="inline-flex items-center gap-2 mt-4 px-6 py-3 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-medium transition-all">مشاهده آهنگ‌ها</a>
+          </div>
+          {% endif %}
+        </div>
+
+        <!-- My Albums -->
+        <div id="albums" class="bg-white/5 border border-white/10 rounded-2xl p-6" data-aos="fade-right">
+          <h3 class="text-xl font-bold mb-6 flex items-center gap-2"><i data-lucide="album" class="w-5 h-5 text-purple-400"></i>آلبوم‌های من</h3>
+          {% if purchased_albums %}
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {% for album in purchased_albums %}
+            <a href="{% url 'album_detail' album.slug %}" class="flex items-center gap-4 p-4 rounded-xl bg-white/5 hover:bg-white/10 border border-white/5 hover:border-purple-500/30 transition-all group">
+              <div class="w-14 h-14 rounded-xl overflow-hidden flex-shrink-0">
+                <img src="{{ album.cover }}" alt="{{ album.title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+              </div>
+              <div class="flex-1 min-w-0">
+                <p class="text-sm font-bold truncate">{{ album.title }}</p>
+                <p class="text-xs text-slate-400 truncate">{{ album.songs.count }} قطعه</p>
+              </div>
+              <i data-lucide="chevron-left" class="w-4 h-4 text-slate-500 group-hover:text-purple-400 transition-colors flex-shrink-0"></i>
+            </a>
+            {% endfor %}
+          </div>
+          {% else %}
+          <div class="text-center py-12">
+            <i data-lucide="album" class="w-16 h-16 text-slate-600 mx-auto mb-4"></i>
+            <p class="text-slate-400">هنوز هیچ آلبومی خریداری نکرده‌اید</p>
+            <a href="{% url 'home' %}" class="inline-flex items-center gap-2 mt-4 px-6 py-3 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-medium transition-all">مشاهده آلبوم‌ها</a>
+          </div>
+          {% endif %}
+        </div>
+
+        <!-- Orders -->
+        <div id="orders" class="bg-white/5 border border-white/10 rounded-2xl p-6" data-aos="fade-right">
+          <h3 class="text-xl font-bold mb-6 flex items-center gap-2"><i data-lucide="shopping-bag" class="w-5 h-5 text-purple-400"></i>سفارش‌های من</h3>
+          {% if orders %}
+          <div class="overflow-x-auto">
+            <table class="w-full text-sm">
+              <thead>
+                <tr class="border-b border-white/10 text-slate-400 text-xs">
+                  <th class="text-right py-3 px-2">#</th>
+                  <th class="text-right py-3 px-2">آیتم‌ها</th>
+                  <th class="text-right py-3 px-2">جمع کل</th>
+                  <th class="text-right py-3 px-2">تاریخ</th>
+                  <th class="text-right py-3 px-2">وضعیت</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for order in orders %}
+                <tr class="border-b border-white/5 hover:bg-white/5 transition-colors">
+                  <td class="py-3 px-2 font-medium">{{ order.id }}</td>
+                  <td class="py-3 px-2">
+                    {% for item in order.items %}
+                      <span class="inline-block">{{ item.title }}{% if not forloop.last %}، {% endif %}</span>
+                    {% empty %}
+                      <span class="text-slate-500">—</span>
+                    {% endfor %}
+                  </td>
+                  <td class="py-3 px-2">
+                    <span class="text-purple-300">{{ order.total|price_format }}</span>
+                    {% if order.coupon_code %}
+                    <br><span class="text-xs text-emerald-400">تخفیف: {{ order.coupon_discount|price_format }}</span>
+                    {% endif %}
+                  </td>
+                  <td class="py-3 px-2 text-slate-400">{{ order.created_at|to_jalali }}</td>
+                  <td class="py-3 px-2">
+                    {% if order.status == 'paid' %}
+                      <div class="flex items-center gap-2">
+                        <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-emerald-500/10 text-emerald-400"><i data-lucide="check" class="w-3 h-3"></i>پرداخت شده</span>
+                        <a href="{% url 'cart_invoice' order.id %}" target="_blank" class="px-2.5 py-1 rounded-lg text-xs font-medium bg-purple-600/20 text-purple-300 hover:bg-purple-600/40 border border-purple-500/20 transition-all whitespace-nowrap inline-flex items-center gap-1"><i data-lucide="printer" class="w-3 h-3"></i>چاپ فاکتور</a>
+                      </div>
+                    {% elif order.status == 'pending' %}
+                      <div class="flex items-center gap-2">
+                        <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-amber-500/10 text-amber-400"><i data-lucide="clock" class="w-3 h-3"></i>در انتظار</span>
+                        <button type="button" onclick="retryVerify({{ order.id }}, this)" class="px-2.5 py-1 rounded-lg text-xs font-medium bg-purple-600/20 text-purple-300 hover:bg-purple-600/40 border border-purple-500/20 transition-all whitespace-nowrap verify-btn{% if order.is_simulated %} sim-only{% endif %}" data-order-id="{{ order.id }}"{% if order.is_simulated %} data-sim="1"{% endif %}>بررسی پرداخت</button>
+                      </div>
+                    {% elif order.status == 'cancelled' %}
+                      <div class="flex items-center gap-2">
+                        <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-red-500/10 text-red-400"><i data-lucide="x" class="w-3 h-3"></i>لغو شده</span>
+                        <span class="text-xs text-slate-500">در صورت کسر وجه با پشتیبانی تماس بگیرید</span>
+                      </div>
+                    {% else %}
+                      <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-slate-500/10 text-slate-400"><i data-lucide="minus" class="w-3 h-3"></i>نامشخص</span>
+                    {% endif %}
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+          {% else %}
+          <div class="text-center py-12">
+            <i data-lucide="shopping-bag" class="w-16 h-16 text-slate-600 mx-auto mb-4"></i>
+            <p class="text-slate-400">هنوز هیچ سفارشی ثبت نکرده‌اید</p>
+            <a href="{% url 'home' %}#latest" class="inline-flex items-center gap-2 mt-4 px-6 py-3 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-medium transition-all">مشاهده آهنگ‌ها</a>
+          </div>
+          {% endif %}
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function retryVerify(orderId, btn) {
+  var originalText = btn.innerHTML;
+  btn.disabled = true;
+  btn.innerHTML = '<span class="inline-block animate-spin w-3 h-3 border-2 border-current border-t-transparent rounded-full ml-1"></span>بررسی...';
+
+  fetch('/cart/retry/', {
+    method: 'POST',
+    headers: {
+      'X-CSRFToken': getCookie('csrftoken'),
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    body: 'order_id=' + orderId,
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(data) {
+    if (data.url) {
+      window.location.href = data.url;
+      return;
+    }
+    if (data.success) {
+      btn.innerHTML = '<i data-lucide="check" class="w-3 h-3 inline"></i> تأیید شد';
+      btn.className = 'px-2.5 py-1 rounded-lg text-xs font-medium bg-emerald-500/10 text-emerald-400 border border-emerald-500/20';
+      setTimeout(function() { location.reload(); }, 1500);
+    } else {
+      btn.disabled = false;
+      btn.innerHTML = 'بررسی مجدد';
+      showToast(data.message || 'خطا در بررسی پرداخت', 'error');
+    }
+  })
+  .catch(function() {
+    btn.disabled = false;
+    btn.innerHTML = 'بررسی مجدد';
+    showToast('خطا در ارتباط با سرور', 'error');
+  });
+}
+
+// Auto-retry pending orders on page load (real Zarinpal only, skip simulated)
+(function() {
+  var btns = document.querySelectorAll('.verify-btn:not(.sim-only)');
+  if (btns.length === 0) return;
+  var idx = 0;
+  function autoNext() {
+    if (idx >= btns.length) return;
+    var btn = btns[idx];
+    idx++;
+    retryVerify(btn.getAttribute('data-order-id'), btn);
+  }
+  // Stagger auto-checks to avoid hammering Zarinpal
+  setTimeout(autoNext, 1000);
+})();
+</script>
+{% endblock %}

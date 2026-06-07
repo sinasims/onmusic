@@ -1,0 +1,150 @@
+{% extends 'base.html' %}
+{% load music_extras %}
+
+{% block title %}جستجوی "{{ query }}" | نواهای بیکلام{% endblock %}
+
+{% block content %}
+
+<section class="pt-28 pb-20">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-12" data-aos="fade-up">
+      <h1 class="text-3xl md:text-4xl font-extrabold mb-3">نتایج جستجو</h1>
+      <form action="{% url 'search' %}" method="get" class="mt-6 max-w-xl mx-auto">
+        <div class="relative">
+          <input type="text" name="q" value="{{ query }}" placeholder="جستجوی آهنگ، آلبوم، مقاله..." class="w-full px-5 py-3.5 rounded-2xl bg-white/5 border border-white/10 text-white placeholder-slate-500 focus:outline-none focus:border-purple-500/50 focus:ring-2 focus:ring-purple-500/20 transition-all text-sm">
+          <button type="submit" class="absolute left-2 top-1/2 -translate-y-1/2 p-2 rounded-xl bg-purple-600 text-white hover:bg-purple-500 transition-colors"><i data-lucide="search" class="w-4 h-4"></i></button>
+        </div>
+      </form>
+    </div>
+
+    {% if query %}
+    <div class="mb-8 text-center">
+      <p class="text-slate-400 text-sm">
+        {% if total_count > 0 %}
+        {{ total_count }} نتیجه برای "<span class="text-purple-300 font-medium">{{ query }}</span>"
+        {% else %}
+        هیچ نتیجهای برای "<span class="text-purple-300 font-medium">{{ query }}</span>" یافت نشد
+        {% endif %}
+      </p>
+    </div>
+    {% endif %}
+
+    <!-- Songs -->
+    {% if songs %}
+    <div class="mb-14" data-aos="fade-up">
+      <div class="flex items-center gap-3 mb-8">
+        <div class="p-2 rounded-lg bg-purple-500/10 text-purple-400"><i data-lucide="music" class="w-5 h-5"></i></div>
+        <h2 class="text-2xl font-bold">آهنگ‌ها</h2>
+        <span class="text-sm text-slate-500">({{ songs|length }})</span>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+        {% for song in songs %}
+        <div class="group relative bg-white/5 border border-white/10 rounded-2xl overflow-hidden hover:-translate-y-1 transition-all duration-300 hover:shadow-2xl hover:shadow-purple-500/10 card-glow">
+          <div class="relative aspect-video overflow-hidden">
+            <img src="{{ song.cover.url }}" alt="{{ song.title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy">
+            <button data-preview-url="{% if song.preview_url %}{{ song.preview_url.url }}{% endif %}" onclick="playPreview('{{ song.title|escapejs }}','{{ song.artist.name|escapejs }}','{{ song.cover.url|escapejs }}','{% if song.preview_url %}{{ song.preview_url.url|escapejs }}{% endif %}')" class="play-btn absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center cursor-pointer">
+              <span class="p-3 rounded-full bg-white/20 backdrop-blur hover:bg-white/30 transition-colors"><i data-lucide="play" class="play-icon w-5 h-5 fill-current"></i></span>
+            </button>
+          </div>
+          <div class="p-4">
+            <h3 class="font-bold mb-0.5 truncate">{{ song.title }}</h3>
+            <p class="text-xs text-slate-400 mb-3">{{ song.artist.name }}</p>
+            <div class="flex items-center justify-between">
+              <span class="text-purple-300 font-bold text-xs">{{ song.price|price_format }}</span>
+              <a href="{% url 'song_detail' song.id %}" class="px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-slate-400 text-xs hover:bg-white/10 transition-colors">جزئیات</a>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+
+    <!-- Artists -->
+    {% if artists %}
+    <div class="mb-14" data-aos="fade-up">
+      <div class="flex items-center gap-3 mb-8">
+        <div class="p-2 rounded-lg bg-orange-500/10 text-orange-400"><i data-lucide="mic-vocal" class="w-5 h-5"></i></div>
+        <h2 class="text-2xl font-bold">خواننده‌ها</h2>
+        <span class="text-sm text-slate-500">({{ artists|length }})</span>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+        {% for artist in artists %}
+        <a href="{% url 'artist_detail' artist.slug %}" class="group bg-white/5 border border-white/10 rounded-2xl overflow-hidden hover:-translate-y-1 transition-all duration-300 hover:shadow-2xl hover:shadow-orange-500/10 text-center p-6">
+          {% if artist.image %}
+          <img src="{{ artist.image }}" alt="{{ artist.name }}" class="w-20 h-20 rounded-full object-cover mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
+          {% else %}
+          <div class="w-20 h-20 rounded-full bg-white/5 mx-auto mb-4 flex items-center justify-center"><i data-lucide="mic-vocal" class="w-8 h-8 text-slate-500"></i></div>
+          {% endif %}
+          <h3 class="font-bold text-lg mb-1">{{ artist.name }}</h3>
+          <p class="text-xs text-slate-500">{{ artist.songs.count }} آهنگ</p>
+        </a>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+
+    <!-- Albums -->
+    {% if albums %}
+    <div class="mb-14" data-aos="fade-up">
+      <div class="flex items-center gap-3 mb-8">
+        <div class="p-2 rounded-lg bg-indigo-500/10 text-indigo-400"><i data-lucide="album" class="w-5 h-5"></i></div>
+        <h2 class="text-2xl font-bold">آلبوم‌ها</h2>
+        <span class="text-sm text-slate-500">({{ albums|length }})</span>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+        {% for album in albums %}
+        <a href="{% url 'album_detail' album.slug %}" class="group relative bg-white/5 border border-white/10 rounded-2xl overflow-hidden hover:-translate-y-1 transition-all duration-300 hover:shadow-2xl hover:shadow-indigo-500/10 card-glow">
+          <div class="relative aspect-video overflow-hidden">
+            <img src="{{ album.cover }}" alt="{{ album.title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy">
+            <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+              <span class="p-3 rounded-full bg-white/20 backdrop-blur hover:bg-white/30 transition-colors"><i data-lucide="eye" class="w-5 h-5"></i></span>
+            </div>
+          </div>
+          <div class="p-4">
+            <h3 class="font-bold mb-0.5 truncate">{{ album.title }}</h3>
+            <p class="text-xs text-slate-400">{{ album.songs.count }} قطعه</p>
+          </div>
+        </a>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+
+    <!-- Blog Posts -->
+    {% if posts %}
+    <div class="mb-14" data-aos="fade-up">
+      <div class="flex items-center gap-3 mb-8">
+        <div class="p-2 rounded-lg bg-emerald-500/10 text-emerald-400"><i data-lucide="file-text" class="w-5 h-5"></i></div>
+        <h2 class="text-2xl font-bold">مقالات</h2>
+        <span class="text-sm text-slate-500">({{ posts|length }})</span>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {% for post in posts %}
+        <a href="{% url 'blog_detail' post.slug %}" class="group bg-white/5 border border-white/10 rounded-2xl overflow-hidden hover:-translate-y-1 transition-all duration-300 hover:shadow-2xl hover:shadow-emerald-500/10">
+          {% if post.image %}
+          <div class="aspect-video overflow-hidden">
+            <img src="{{ post.image }}" alt="{{ post.title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy">
+          </div>
+          {% endif %}
+          <div class="p-5">
+            <h3 class="font-bold mb-2 leading-snug">{{ post.title }}</h3>
+            <p class="text-sm text-slate-400 leading-relaxed">{{ post.excerpt|default:post.content|truncatewords:30 }}</p>
+          </div>
+        </a>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+
+    {% if query and total_count == 0 %}
+    <div class="text-center py-20" data-aos="fade-up">
+      <i data-lucide="search-x" class="w-20 h-20 text-slate-700 mx-auto mb-6"></i>
+      <p class="text-slate-400 text-lg">چیزی با این کلیدواژه پیدا نشد</p>
+      <a href="{% url 'home' %}" class="inline-flex items-center gap-2 mt-6 px-6 py-3 rounded-xl bg-purple-600/20 text-purple-300 border border-purple-500/30 hover:bg-purple-600 hover:text-white transition-all">بازگشت به صفحه اصلی</a>
+    </div>
+    {% endif %}
+  </div>
+</section>
+
+{% endblock %}

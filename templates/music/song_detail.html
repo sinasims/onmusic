@@ -1,0 +1,433 @@
+{% extends "base.html" %}
+{% load static music_extras %}
+
+{% block title %}{{ song.title }} (بی‌کلام) • {{ song.artist.name }} • دانلود با کیفیت ۳۲۰{% endblock %}
+{% block meta_description %}دانلود نسخه بی‌کلام آهنگ «{{ song.title }}» از {{ song.artist.name }}{% if song.composer %} با آهنگسازی {{ song.composer }}{% endif %}{% if song.lyricist %} و ترانه‌سرایی {{ song.lyricist }}{% endif %}. تنظیم جدید و بازسازی شده با کیفیت ۳۲۰ و پیش‌نمایش رایگان. مناسب برای اجرای زنده و تمرین.{% endblock %}
+{% block meta_keywords %}{{ song.title }}, {{ song.artist.name }}, آهنگ بی‌کلام {{ song.artist.name }}, دانلود آهنگ {{ song.title }}, موسیقی بیکلام, اهنگ بی کلام جدید, اجرای زنده, تمرین ساز, بیکلام آنریتم{% endblock %}
+{% block og_title %}{{ song.title }} (بی‌کلام) • {{ song.artist.name }} • دانلود با کیفیت ۳۲۰{% endblock %}
+{% block og_description %}دانلود نسخه بی‌کلام آهنگ «{{ song.title }}» از {{ song.artist.name }}{% if song.composer %}، آهنگسازی {{ song.composer }}{% endif %}{% if song.lyricist %}، ترانه {{ song.lyricist }}{% endif %}. تنظیم جدید آنریتم، کیفیت ۳۲۰، مناسب برای اجرای زنده و تمرین.{% endblock %}
+{% block og_image %}{{ song.cover.url }}{% endblock %}
+{% block twitter_image %}{{ song.cover.url }}{% endblock %}
+{% block og_type %}music.song{% endblock %}
+
+{% block schema %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "MusicRecording",
+  "name": "{{ song.title }} (بی‌کلام) - {{ song.artist.name }}",
+  "byArtist": {
+    "@type": "MusicGroup",
+    "name": "{{ song.artist.name }}"
+  },
+  "inAlbum": {% if song.album %}{
+    "@type": "MusicAlbum",
+    "name": "{{ song.album.title }}"
+  }{% else %}null{% endif %},
+  "description": "نسخه بی‌کلام {{ song.title }} از {{ song.artist.name }} با تنظیم جدید آنریتم{% if song.bpm %}، تمپو {{ song.bpm }} BPM{% endif %}{% if song.musical_key %}، گام {{ song.musical_key }}{% endif %} – مناسب برای اجرای زنده و تمرین ساز با کیفیت ۳۲۰",
+  "image": "{{ song.cover.url }}",
+  "url": "{{ request.build_absolute_uri }}",
+  "duration": "{{ song.duration|default:'PT0M' }}",
+  "genre": "Instrumental",
+  "datePublished": "{{ song.created_at|date:'c' }}",
+  "keywords": "{{ song.title }}, {{ song.artist.name }}, آهنگ بی‌کلام, دانلود آهنگ, موسیقی بیکلام"{% if rating_count > 0 %},
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "{{ avg_rating|floatformat:1 }}",
+    "bestRating": "5",
+    "ratingCount": "{{ rating_count }}"
+  }{% endif %},
+  "offers": {
+    "@type": "Offer",
+    "price": "{{ song.price }}",
+    "priceCurrency": "IRR",
+    "availability": "https://schema.org/InStock"
+  }
+}
+</script>
+{% with schema_comments=comments|slice:":15" %}
+{% if schema_comments %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  "itemListElement": [
+    {% for comment in schema_comments %}
+    {
+      "@type": "Comment",
+      "@id": "#comment-{{ comment.id }}",
+      "author": {
+        "@type": "Person",
+        "name": "{{ comment.name|escapejs }}"
+      },
+      "dateCreated": "{{ comment.created_at|date:'c' }}",
+      "text": "{{ comment.text|truncatewords:50|escapejs }}"
+      {% if comment.rating %}
+      ,"reviewRating": {
+        "@type": "Rating",
+        "ratingValue": "{{ comment.rating }}",
+        "bestRating": "5"
+      }
+      {% endif %}
+    }{% if comment.replies.all %},
+    {% for reply in comment.replies.all %}
+    {
+      "@type": "Comment",
+      "author": {
+        "@type": "Person",
+        "name": "{{ reply.name|escapejs }}"
+      },
+      "dateCreated": "{{ reply.created_at|date:'c' }}",
+      "text": "{{ reply.text|truncatewords:50|escapejs }}",
+      "parentItem": {
+        "@id": "#comment-{{ comment.id }}"
+      }
+    }{% if not forloop.parentloop.last or not forloop.last %},{% endif %}
+    {% endfor %}
+    {% elif not forloop.last %},
+    {% endif %}
+    {% endfor %}
+  ]
+}
+</script>
+{% endif %}
+{% endwith %}
+{% endblock %}
+
+{% block content %}
+<section class="relative min-h-[60vh] flex items-center pt-24 pb-12 overflow-hidden">
+  <div class="absolute inset-0 bg-gradient-to-b from-slate-950 via-indigo-950/30 to-slate-950 z-0"></div>
+  <div class="absolute top-1/3 left-1/2 -translate-x-1/2 w-[500px] h-[500px] rounded-full blur-[120px] bg-purple-600/10 z-0"></div>
+  <div class="absolute inset-0 z-[1]">
+    <img src="{{ song.cover.url }}" alt="{{ song.title }}" class="w-full h-full object-cover opacity-10">
+  </div>
+  <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+    <!-- Breadcrumb -->
+    <nav class="flex items-center gap-1.5 text-xs text-slate-500 mb-4" aria-label="مسیر راهنما">
+      <a href="/" class="hover:text-purple-400 transition-colors flex items-center gap-1"><i data-lucide="home" class="w-3 h-3"></i></a>
+      <i data-lucide="chevron-left" class="w-3 h-3 text-slate-600"></i>
+      <a href="{% url 'song_list' %}" class="hover:text-purple-400 transition-colors">آهنگ‌ها</a>
+      <i data-lucide="chevron-left" class="w-3 h-3 text-slate-600"></i>
+      <span class="text-slate-300">{{ song.title }}</span>
+    </nav>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {"@type": "ListItem", "position": 1, "name": "خانه", "item": "{{ request.scheme }}://{{ request.get_host }}/"},
+        {"@type": "ListItem", "position": 2, "name": "آهنگ‌ها", "item": "{{ request.scheme }}://{{ request.get_host }}{% url 'song_list' %}"},
+        {"@type": "ListItem", "position": 3, "name": "{{ song.title }}", "item": "{{ request.build_absolute_uri }}"}
+      ]
+    }
+    </script>
+    <div class="flex flex-col md:flex-row items-center gap-10">
+      <div class="w-64 h-64 md:w-80 md:h-80 rounded-2xl overflow-hidden shadow-2xl shadow-purple-500/20 ring-1 ring-white/10 flex-shrink-0" data-aos="fade-left">
+        <img src="{{ song.cover.url }}" alt="{{ song.title }}" class="w-full h-full object-cover">
+      </div>
+      <div class="flex-1 text-center md:text-right" data-aos="fade-right">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-xs text-slate-300 mb-4">
+          <i data-lucide="music" class="w-3 h-3 text-purple-400"></i>آهنگ بیکلام
+        </div>
+        <h1 class="text-3xl md:text-5xl font-extrabold mb-3">{{ song.title }}</h1>
+        <a href="{% url 'artist_detail' song.artist.slug %}" class="text-lg text-purple-400 hover:text-purple-300 transition-colors inline-flex items-center gap-2 mb-4">
+          <i data-lucide="mic-vocal" class="w-5 h-5"></i>{{ song.artist.name }}
+        </a>
+        <p class="text-slate-400 text-sm mb-6">نسخه بی‌کلام «{{ song.title }}» از {{ song.artist.name }} با تنظیم جدید گروه آنریتم{% if song.duration %} به مدت {{ song.duration }}{% endif %} با کیفیت استودیویی ۳۲۰. مناسب برای اجرای زنده، تمرین و تولید محتوا.</p>
+        <p class="text-slate-400 text-sm mb-6">سوپرایز امشب <strong>{{site_config.site_name}}</strong> برای کاربران عزیز | دانلود آهنگ جدید به نام “<strong>{{ song.title }}</strong>” با صدای معروف <strong>{{ song.artist.name }}</strong> با متن ترانه و کیفیت اصلی MP3</p>
+        <!-- Audio Versions -->
+        <div class="space-y-3 mb-6">
+          {% if song.preview_url %}
+          <div class="flex items-center gap-2">
+            <button data-preview-url="{{ song.preview_url.url }}" onclick="playPreview('{{ song.title|escapejs }}','{{ song.artist.name|escapejs }}','{{ song.cover.url|escapejs }}','{{ song.preview_url.url|escapejs }}')" class="play-btn flex-1 flex items-center gap-3 px-4 py-3 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all text-right group">
+              <span class="p-2 rounded-lg bg-purple-600/20 text-purple-400 group-hover:bg-purple-600 group-hover:text-white transition-all"><i data-lucide="headphones" class="w-5 h-5"></i></span>
+              <div class="flex-1 min-w-0">
+                <p class="text-sm font-bold">دمو</p>
+                <p class="text-xs text-slate-500">پیش‌نمایش رایگان</p>
+              </div>
+              <i data-lucide="play" class="play-icon w-5 h-5 text-slate-400"></i>
+            </button>
+            <a href="{{ song.preview_url.url }}" target="_blank" download class="p-3 rounded-xl bg-white/5 border border-white/10 text-slate-400 hover:text-purple-400 hover:bg-white/10 transition-all" title="دانلود دمو"><i data-lucide="download" class="w-5 h-5"></i></a>
+          </div>
+          {% endif %}
+          {% if song.original_audio %}
+          <div class="flex items-center gap-2">
+            <button data-preview-url="{{ song.original_audio.url }}" onclick="playPreview('{{ song.title|escapejs }}','{{ song.artist.name|escapejs }}','{{ song.cover.url|escapejs }}','{{ song.original_audio.url|escapejs }}')" class="play-btn flex-1 flex items-center gap-3 px-4 py-3 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all text-right group">
+              <span class="p-2 rounded-lg bg-emerald-600/20 text-emerald-400 group-hover:bg-emerald-600 group-hover:text-white transition-all"><i data-lucide="disc" class="w-5 h-5"></i></span>
+              <div class="flex-1 min-w-0">
+                <p class="text-sm font-bold">نسخه اصلی</p>
+                <p class="text-xs text-slate-500">صدای اصلی اثر</p>
+              </div>
+              <i data-lucide="play" class="play-icon w-5 h-5 text-slate-400"></i>
+            </button>
+            <a href="{{ song.original_audio.url }}" target="_blank" download class="p-3 rounded-xl bg-white/5 border border-white/10 text-slate-400 hover:text-purple-400 hover:bg-white/10 transition-all" title="دانلود نسخه اصلی"><i data-lucide="download" class="w-5 h-5"></i></a>
+          </div>
+          {% endif %}
+          {% if song.arranged_audio %}
+            {% if has_purchased %}
+            <div class="flex items-center gap-2">
+              <button data-preview-url="{% url 'download_song' song.id 'arranged' %}" onclick="playPreview('{{ song.title|escapejs }}','{{ song.artist.name|escapejs }}','{{ song.cover.url|escapejs }}','{% url 'download_song' song.id 'arranged' %}')" class="play-btn flex-1 flex items-center gap-3 px-4 py-3 rounded-xl bg-gradient-to-r from-purple-600/20 to-indigo-600/20 border border-purple-500/30 hover:from-purple-600 hover:to-indigo-600 hover:text-white transition-all text-right group">
+                <span class="p-2 rounded-lg bg-purple-600/20 text-purple-400 group-hover:bg-white/20 group-hover:text-white transition-all"><i data-lucide="sparkles" class="w-5 h-5"></i></span>
+                <div class="flex-1 min-w-0">
+                  <p class="text-sm font-bold">تنظیم جدید</p>
+                  <p class="text-xs text-purple-300">{% if is_directly_purchased %}خریداری شده{% else %}دسترسی با اشتراک{% endif %}</p>
+                </div>
+                <i data-lucide="play" class="play-icon w-5 h-5 text-purple-400"></i>
+              </button>
+              <button onclick="downloadArranged({{ song.id }})" class="p-3 rounded-xl bg-purple-600/20 border border-purple-500/30 text-purple-400 hover:bg-purple-600 hover:text-white transition-all" title="دانلود تنظیم جدید"><i data-lucide="download" class="w-5 h-5"></i></button>
+            </div>
+            {% else %}
+            <div class="w-full flex items-center gap-3 px-4 py-3 rounded-xl bg-white/5 border border-white/10 opacity-60">
+              <span class="p-2 rounded-lg bg-slate-700 text-slate-500"><i data-lucide="lock" class="w-5 h-5"></i></span>
+              <div class="flex-1 min-w-0">
+                <p class="text-sm font-bold">تنظیم جدید</p>
+                <p class="text-xs text-slate-500">برای دسترسی خرید کنید</p>
+              </div>
+              <span class="text-purple-300 font-bold text-sm">{{ song.price|price_format }}</span>
+            </div>
+            {% endif %}
+          {% endif %}
+        </div>
+
+        <!-- Buy / Price -->
+        {% if not has_purchased %}
+        <div class="flex flex-col sm:flex-row items-center gap-4">
+          <span class="text-3xl font-bold text-purple-300">{{ song.price|price_format }}</span>
+          <button onclick="addToCart({{ song.id }},'{{ song.title|escapejs }}','{{ song.artist.name|escapejs }}','{{ song.cover.url|escapejs }}',{{ song.price }})" class="px-8 py-3 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-semibold hover:shadow-lg hover:shadow-purple-500/25 transition-all hover:-translate-y-1 flex items-center gap-2">
+            <i data-lucide="shopping-cart" class="w-5 h-5"></i>خرید تنظیم جدید
+          </button>
+        </div>
+        {% endif %}
+
+        <!-- Meta badges -->
+        <div class="flex items-center gap-6 mt-6 text-sm text-slate-500 flex-wrap justify-center md:justify-start">
+          <button data-song-id="{{ song.id }}" onclick="toggleWishlist({{ song.id }}, this)" class="wishlist-btn flex items-center gap-1.5 text-slate-400 hover:text-red-400 transition-all" title="افزودن به علاقه‌مندی‌ها"><i data-lucide="heart" class="w-4 h-4"></i><span>علاقه‌مندی</span></button>
+          <span><i data-lucide="calendar" class="w-4 h-4 inline"></i> {{ song.created_at|to_jalali }}</span>
+          {% if song.duration %}<span><i data-lucide="clock" class="w-4 h-4 inline"></i> {{ song.duration }}</span>{% endif %}
+          {% if song.bpm %}<span><i data-lucide="activity" class="w-4 h-4 inline"></i> {{ song.bpm }} BPM</span>{% endif %}
+          <span><i data-lucide="eye" class="w-4 h-4 inline"></i> {{ song.views_count }} بازدید</span>
+          <span><i data-lucide="shopping-cart" class="w-4 h-4 inline"></i> {{ song.purchase_count }} خرید</span>
+          {% if song.musical_key %}<span><i data-lucide="music" class="w-4 h-4 inline"></i> {{ song.musical_key }}</span>{% endif %}
+          {% if song.is_best_seller %}<span class="text-orange-400"><i data-lucide="flame" class="w-4 h-4 inline"></i> پرفروش</span>{% endif %}
+          {% if song.is_popular %}<span class="text-cyan-400"><i data-lucide="trending-up" class="w-4 h-4 inline"></i> پرطرفدار</span>{% endif %}
+        </div>
+        {% with share_url=request.build_absolute_uri share_text=song.title|add:' - '|add:song.artist.name %}
+          {% include "include_share.html" %}
+        {% endwith %}
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Rating ===== -->
+<section class="py-16 border-t border-white/5">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="max-w-xl mx-auto text-center" data-aos="fade-up">
+      <h2 class="text-2xl font-bold mb-2">امتیاز کاربران</h2>
+      <div class="flex items-center justify-center gap-2 mb-4">
+        <div class="flex items-center gap-0.5 text-2xl" id="ratingStarsDisplay">
+          {% for i in "12345"|make_list %}
+          <span class="star-display {% if forloop.counter <= avg_rating %}text-yellow-400{% else %}text-slate-600{% endif %}">★</span>
+          {% endfor %}
+        </div>
+        <span class="text-lg font-bold text-slate-300" id="avgRatingText">{{ avg_rating|floatformat:1 }}</span>
+        <span class="text-sm text-slate-500">({{ rating_count }} نظر)</span>
+      </div>
+      {% if user.is_authenticated %}
+      <p class="text-sm text-slate-400 mb-4">امتیاز شما به این آهنگ:</p>
+      <div class="flex items-center justify-center gap-1 text-3xl" id="userRatingStars">
+        {% for i in "12345"|make_list %}
+        <button data-score="{{ forloop.counter }}" class="user-star {% if forloop.counter <= user_rating %}text-yellow-400{% else %}text-slate-600 hover:text-yellow-400/50{% endif %} transition-colors cursor-pointer">★</button>
+        {% endfor %}
+      </div>
+      {% else %}
+      <p class="text-sm text-slate-500">برای ثبت امتیاز <button onclick="document.getElementById('authBtn').click()" class="text-purple-400 hover:text-purple-300 underline">وارد شوید</button></p>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+<!-- About / Description -->
+<section class="py-16 border-t border-white/5">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="max-w-3xl mx-auto">
+      <h2 class="text-2xl font-bold mb-6 text-center" data-aos="fade-up">درباره آهنگ {{ song.title }}</h2>
+      <div class="ck-content" data-aos="fade-up">
+        <p>آهنگ «{{ song.title }}» با صدای {{ song.artist.name }}، یکی از ماندگارترین آهنگ‌های موسیقی ایران است. فضای این قطعه، تلفیقی از احساس و ملودی است – همان حال و هوایی که طرفداران این سبک را شیفته خود می‌کند.</p>
+        <p>نسخه بی‌کلام «{{ song.title }}» که توسط گروه آنریتم بازسازی و تنظیم شده، با تکیه بر سازهای مختلف سعی کرده همان عمق احساسی نسخه اصلی را بدون کلام منتقل کند{% if song.bpm %}. تمپوی {{ song.bpm }} BPM{% endif %}{% if song.musical_key %} و گام {{ song.musical_key }}{% endif %}{% if song.bpm or song.musical_key %}، به قطعه حالتی روان و تأملی بخشیده است{% endif %}.</p>
+        <p>اگر به دنبال موسیقی‌ای برای اجرای زنده، تمرین ساز، یا استفاده در ویدیو و محتوای خود هستید، این نسخه بی‌کلام «{{ song.title }}» می‌تواند همراه خوبی باشد. کیفیت استودیویی ۳۲۰ و تنظیم جدید، تجربه شنیداری لذت‌بخشی را برای طرفداران {{ song.artist.name }} و دوستداران موسیقی بی‌کلام فراهم می‌کند.</p>
+        {% if song.description %}
+        {{ song.description|safe }}
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Lyrics -->
+{% if song.lyrics %}
+<section class="py-16 border-t border-white/5 bg-gradient-to-b from-slate-950 to-slate-900/50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="max-w-3xl mx-auto">
+      <h2 class="text-2xl font-bold mb-6 text-center" data-aos="fade-up">متن آهنگ {{ song.title }}</h2>
+      <div class="p-6 rounded-xl bg-white/5 border border-white/10 text-slate-300 text-sm leading-relaxed whitespace-pre-line text-center" data-aos="fade-up" dir="rtl">
+        {{ song.lyrics|linebreaks }}
+      </div>
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<!-- Details -->
+{% if song.composer or song.lyricist or song.duration or song.bpm or song.musical_key or song.description %}
+<section class="py-16 border-t border-white/5">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="max-w-3xl mx-auto">
+      <h2 class="text-2xl font-bold mb-8 text-center" data-aos="fade-up">جزئیات و مشخصات اثر</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4" data-aos="fade-up">
+        {% if song.composer %}
+        <div class="flex items-center gap-3 p-4 rounded-xl bg-white/5 border border-white/10">
+          <span class="p-2 rounded-lg bg-purple-600/10 text-purple-400"><i data-lucide="pen-tool" class="w-5 h-5"></i></span>
+          <div>
+            <p class="text-xs text-slate-500">آهنگساز</p>
+            <p class="text-sm font-bold">{{ song.composer }}</p>
+          </div>
+        </div>
+        {% endif %}
+        {% if song.lyricist %}
+        <div class="flex items-center gap-3 p-4 rounded-xl bg-white/5 border border-white/10">
+          <span class="p-2 rounded-lg bg-emerald-600/10 text-emerald-400"><i data-lucide="feather" class="w-5 h-5"></i></span>
+          <div>
+            <p class="text-xs text-slate-500">ترانه‌سرا</p>
+            <p class="text-sm font-bold">{{ song.lyricist }}</p>
+          </div>
+        </div>
+        {% endif %}
+        {% if song.duration %}
+        <div class="flex items-center gap-3 p-4 rounded-xl bg-white/5 border border-white/10">
+          <span class="p-2 rounded-lg bg-cyan-600/10 text-cyan-400"><i data-lucide="clock" class="w-5 h-5"></i></span>
+          <div>
+            <p class="text-xs text-slate-500">مدت زمان</p>
+            <p class="text-sm font-bold">{{ song.duration }}</p>
+          </div>
+        </div>
+        {% endif %}
+        {% if song.bpm %}
+        <div class="flex items-center gap-3 p-4 rounded-xl bg-white/5 border border-white/10">
+          <span class="p-2 rounded-lg bg-rose-600/10 text-rose-400"><i data-lucide="activity" class="w-5 h-5"></i></span>
+          <div>
+            <p class="text-xs text-slate-500">تمپو</p>
+            <p class="text-sm font-bold">{{ song.bpm }} BPM</p>
+          </div>
+        </div>
+        {% endif %}
+        {% if song.musical_key %}
+        <div class="flex items-center gap-3 p-4 rounded-xl bg-white/5 border border-white/10">
+          <span class="p-2 rounded-lg bg-amber-600/10 text-amber-400"><i data-lucide="music" class="w-5 h-5"></i></span>
+          <div>
+            <p class="text-xs text-slate-500">گام</p>
+            <p class="text-sm font-bold">{{ song.musical_key }}</p>
+          </div>
+        </div>
+        {% endif %}
+      </div>
+          {% if song.composer or song.lyricist or song.bpm or song.musical_key %}
+          <div class="mt-6 p-5 rounded-xl bg-gradient-to-br from-purple-900/10 to-indigo-900/10 border border-purple-500/10" data-aos="fade-up">
+            <p class="text-slate-300 text-sm leading-relaxed">
+              آهنگ «{{ song.title }}» {% if song.composer %}با آهنگسازی {{ song.composer }}{% endif %}{% if song.lyricist %} و ترانه‌سرایی {{ song.lyricist }}{% endif %} 
+              {% if song.bpm or song.musical_key %}با 
+              {% if song.bpm %}تمپوی {{ song.bpm }} BPM{% if song.musical_key %} و {% endif %}{% endif %}
+              {% if song.musical_key %}گام {{ song.musical_key }}{% endif %}
+              {% endif %}
+              تنظیم و بازسازی شده است. این نسخه بیکلام با کیفیت استودیویی ۳۲۰ در دسترس است و گزینه‌ای ایده‌آل برای اجرای زنده، تمرین ساز و تولید محتوا می‌باشد.
+            </p>
+          </div>
+          {% endif %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<!-- Artist Bio -->
+{% if song.artist.bio %}
+<section class="py-16 border-t border-white/5 bg-gradient-to-b from-slate-950 to-slate-900/50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="max-w-3xl mx-auto text-center" data-aos="fade-up">
+      <h2 class="text-2xl font-bold mb-6">درباره {{ song.artist.name }}</h2>
+      <div class="text-slate-400 text-md leading-relaxed mb-4 text-justify">{{ song.artist.bio|linebreaks }}</div>
+      <a href="{% url 'artist_detail' song.artist.slug %}" class="inline-flex items-center gap-2 text-purple-400 hover:text-purple-300 font-medium transition-colors mt-4">
+        <i data-lucide="mic-vocal" class="w-4 h-4"></i>مشاهده همه آثار {{ song.artist.name }}
+        <i data-lucide="arrow-left" class="w-4 h-4"></i>
+      </a>
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<!-- ===== Related Songs ===== -->
+{% if related_songs %}
+<section class="py-20 border-t border-white/5">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center gap-3 mb-10" data-aos="fade-left">
+      <div class="p-2 rounded-lg bg-purple-500/10 text-purple-400"><i data-lucide="music" class="w-5 h-5"></i></div>
+      <h2 class="text-2xl md:text-3xl font-bold">آهنگ‌های مشابه از {{ song.artist.name }}</h2>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      {% for s in related_songs %}
+      <a href="{% url 'song_detail' s.id %}" class="group bg-white/5 border border-white/10 rounded-2xl overflow-hidden hover:-translate-y-1 transition-all duration-300 hover:shadow-2xl hover:shadow-purple-500/10 card-glow" data-aos="fade-up">
+        <div class="relative aspect-video overflow-hidden">
+          <img src="{{ s.cover.url }}" alt="{{ s.title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy">
+          <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+            <span class="p-3 rounded-full bg-white/20 backdrop-blur"><i data-lucide="play" class="w-5 h-5 fill-current text-white"></i></span>
+          </div>
+        </div>
+        <div class="p-4">
+          <h3 class="font-bold text-sm truncate">{{ s.title }}</h3>
+          <p class="text-xs text-slate-400 mt-1">{{ s.price|price_format }}</p>
+        </div>
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<!-- ===== Comments ===== -->
+{% with content_type_id=content_type_id object_id=song.id %}
+  {% include "include_comments.html" %}
+{% endwith %}
+
+{% endblock %}
+
+{% block page_data %}
+    const hasSubscription = {{ has_subscription|yesno:"true,false" }};
+    const purchasedSongIds = new Set({{ purchased_song_ids_json|safe }});
+    const songId = {{ song.id }};
+
+    document.getElementById('userRatingStars')?.addEventListener('click', async (e) => {
+      const btn = e.target.closest('.user-star');
+      if (!btn) return;
+      const score = parseInt(btn.dataset.score);
+      const resp = await fetch('/api/rate/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'X-CSRFToken': getCookie('csrftoken') },
+        body: JSON.stringify({ song_id: songId, score }),
+      });
+      const data = await resp.json();
+      if (data.success) {
+        document.querySelectorAll('.user-star').forEach((s, i) => {
+          s.classList.toggle('text-yellow-400', i < score);
+          s.classList.toggle('text-slate-600', i >= score);
+        });
+        document.querySelectorAll('.star-display').forEach((s, i) => {
+          s.classList.toggle('text-yellow-400', i < Math.round(data.avg_rating));
+          s.classList.toggle('text-slate-600', i >= Math.round(data.avg_rating));
+        });
+        document.getElementById('avgRatingText').textContent = data.avg_rating;
+        document.getElementById('avgRatingText').nextElementSibling.textContent = '(' + data.rating_count + ' نظر)';
+        showToast(data.message, 'success');
+      } else {
+        showToast(data.message, 'error');
+      }
+    });
+{% endblock %}

@@ -1,0 +1,17 @@
+{% load music_extras %}
+{% for post in posts %}
+<a href="{% url 'blog_detail' post.slug %}" class="group bg-white/5 border border-white/10 rounded-2xl overflow-hidden hover:-translate-y-1 transition-all duration-300 hover:shadow-2xl hover:shadow-purple-500/10 card-glow" data-aos="fade-up">
+  <div class="relative aspect-video overflow-hidden">
+    <img src="{{ post.image }}" alt="{{ post.title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy">
+    {% if post.category %}
+    <span class="absolute top-3 right-3 px-2.5 py-1 rounded-md text-xs font-medium bg-purple-600/80 text-white backdrop-blur-sm">{{ post.category.name }}</span>
+    {% endif %}
+  </div>
+  <div class="p-5">
+    <p class="text-xs text-slate-500 mb-2">{{ post.date_published|to_jalali }}</p>
+    <h3 class="text-lg font-bold mb-2 leading-snug">{{ post.title }}</h3>
+    <p class="text-sm text-slate-400 leading-relaxed mb-4">{{ post.excerpt|truncatewords:20 }}</p>
+    <span class="inline-flex items-center gap-1 text-purple-400 text-sm font-medium group-hover:text-purple-300 transition-colors">ادامه مطلب<i data-lucide="arrow-left" class="w-4 h-4"></i></span>
+  </div>
+</a>
+{% endfor %}

@@ -1,0 +1,577 @@
+﻿<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0f172a" id="themeColorMeta">
+  <title>نواهای بیکلام | بازسازی آهنگ‌های معروف</title>
+  <link rel="stylesheet" href="assets/css/tailwind.css">
+  <link rel="stylesheet" href="dist/aos.css">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body class="bg-slate-950 text-slate-100 font-sans antialiased overflow-x-hidden">
+<script>if(localStorage.getItem('theme')==='light')document.body.classList.add('light')</script>
+
+  <!-- ===== Navbar ===== -->
+  <nav id="navbar" class="fixed top-0 w-full z-50 transition-all duration-300 bg-slate-950/70 backdrop-blur-md border-b border-white/5">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        <div class="flex items-center gap-2">
+          <i data-lucide="music" class="w-6 h-6 text-purple-500"></i>
+          <span class="text-xl font-bold bg-gradient-to-r from-purple-400 to-indigo-400 bg-clip-text text-transparent">نواهای بیکلام</span>
+        </div>
+        <div class="hidden md:flex items-center gap-8">
+          <a href="#home" class="text-sm hover:text-purple-400 transition-colors">صفحه اصلی</a>
+          <a href="#latest" class="text-sm hover:text-purple-400 transition-colors">آهنگ‌های جدید</a>
+          <a href="#bestsellers" class="text-sm hover:text-purple-400 transition-colors">پرفروش‌ها</a>
+          <a href="#popular" class="text-sm hover:text-purple-400 transition-colors">پرطرفدارها</a>
+          <a href="#blog" class="text-sm hover:text-purple-400 transition-colors">وبلاگ</a>
+          <a href="#artists" class="text-sm hover:text-purple-400 transition-colors">خواننده‌ها</a>
+        </div>
+        <div class="flex items-center gap-3">
+          <button id="themeToggle" class="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-slate-300 hover:bg-white/10 hover:text-purple-400 transition-all" title="تغییر تم">
+            <i data-lucide="moon" class="w-4 h-4"></i>
+            <i data-lucide="sun" class="w-4 h-4 hidden"></i>
+          </button>
+          <button id="authBtn" class="p-2 text-slate-200 hover:text-purple-400 transition-colors" title="ورود">
+            <i data-lucide="user" class="w-5 h-5"></i>
+          </button>
+          <button id="cartBtn" class="relative p-2 text-slate-200 hover:text-purple-400 transition-colors">
+            <i data-lucide="shopping-cart" class="w-5 h-5"></i>
+            <span id="cartBadge" class="cart-badge hidden">0</span>
+          </button>
+          <button class="md:hidden text-slate-200" id="mobileMenuBtn">
+            <i data-lucide="menu" class="w-6 h-6"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ===== Mobile Drawer ===== -->
+  <div id="mobileOverlay" class="drawer-overlay"></div>
+  <div id="mobileDrawer" class="drawer-sidebar drawer-right">
+    <div class="flex items-center justify-between p-4 border-b border-white/10">
+      <span class="font-bold text-lg">منو</span>
+      <button id="mobileClose" class="p-2 text-slate-400 hover:text-white transition-colors rounded-lg hover:bg-white/5">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+    </div>
+    <div class="flex-1 overflow-y-auto p-4 space-y-1">
+      <a href="#home" class="block py-3 px-4 rounded-xl hover:bg-white/5 text-slate-200 hover:text-purple-400 transition-colors">صفحه اصلی</a>
+      <a href="#latest" class="block py-3 px-4 rounded-xl hover:bg-white/5 text-slate-200 hover:text-purple-400 transition-colors">آهنگ‌های جدید</a>
+      <a href="#bestsellers" class="block py-3 px-4 rounded-xl hover:bg-white/5 text-slate-200 hover:text-purple-400 transition-colors">پرفروش‌ها</a>
+      <a href="#popular" class="block py-3 px-4 rounded-xl hover:bg-white/5 text-slate-200 hover:text-purple-400 transition-colors">پرطرفدارها</a>
+      <a href="#blog" class="block py-3 px-4 rounded-xl hover:bg-white/5 text-slate-200 hover:text-purple-400 transition-colors">وبلاگ</a>
+      <a href="#artists" class="block py-3 px-4 rounded-xl hover:bg-white/5 text-slate-200 hover:text-purple-400 transition-colors">خواننده‌ها</a>
+    </div>
+  </div>
+
+  <!-- ===== Hero Slider ===== -->
+  <section id="home" class="relative min-h-screen flex items-center justify-center pt-16 overflow-hidden">
+    <div class="absolute inset-0 bg-gradient-to-b from-slate-950 via-indigo-950/40 to-slate-950 z-0"></div>
+    <div id="heroGlow" class="absolute top-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[600px] rounded-full blur-[120px] z-0 transition-all duration-700 bg-purple-600/20"></div>
+
+        <div class="absolute inset-0 z-[1] overflow-hidden">
+            <img class="hero-bg active w-full h-full object-cover" src="https://picsum.photos/seed/guitar/1600/900" alt="">
+            <img class="hero-bg w-full h-full object-cover" src="https://picsum.photos/seed/microphone/1600/900" alt="">
+            <img class="hero-bg w-full h-full object-cover" src="https://picsum.photos/seed/peace/1600/900" alt="">
+          </div>
+    
+    <div class="relative z-10 max-w-4xl mx-auto px-4 text-center min-h-[420px] flex items-center justify-center">
+            <div class="hero-slide active">
+        <div>
+          <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 mb-6">
+            <i data-lucide="music" class="w-4 h-4 text-purple-400"></i>
+            <span class="text-sm text-slate-300">تجربه‌ای متفاوت از موسیقی بیکلام</span>
+          </div>
+          <h1 class="text-4xl md:text-6xl lg:text-7xl font-extrabold leading-tight mb-6">
+            <span class="block">بازسازی و تنظیم مجدد</span>
+            <span class="bg-gradient-to-r from-purple-400 via-indigo-400 to-cyan-400 bg-clip-text text-transparent">آهنگ‌های ماندگار</span>
+            <span class="block text-3xl md:text-5xl mt-2">به سبک بیکلام</span>
+          </h1>
+          <p class="text-lg md:text-xl text-slate-400 mb-10 max-w-2xl mx-auto leading-relaxed">
+            مجموعه‌ای منحصربه‌فرد از محبوب‌ترین ترانه‌ها، بازسازی شده با سازهای باکیفیت و تنظیمی تازه.          </p>
+          <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <a href="#latest" class="px-8 py-3.5 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-semibold hover:shadow-lg hover:shadow-purple-500/25 transition-all hover:-translate-y-1 flex items-center gap-2">
+              <i data-lucide="headphones" class="w-5 h-5"></i>مشاهده آهنگ‌ها            </a>
+                        <a href="#bestsellers" class="px-8 py-3.5 rounded-xl bg-white/5 border border-white/10 text-slate-200 font-semibold hover:bg-white/10 transition-all hover:-translate-y-1 flex items-center gap-2">
+              <i data-lucide="shopping-bag" class="w-5 h-5"></i>خرید فوری            </a>
+                      </div>
+        </div>
+      </div>
+            <div class="hero-slide">
+        <div>
+          <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 mb-6">
+            <i data-lucide="sparkles" class="w-4 h-4 text-purple-400"></i>
+            <span class="text-sm text-slate-300">کیفیت استودیویی، حس و حالی تازه</span>
+          </div>
+          <h1 class="text-4xl md:text-6xl lg:text-7xl font-extrabold leading-tight mb-6">
+            <span class="block">جدیدترین تنظیم‌ها</span>
+            <span class="bg-gradient-to-r from-cyan-400 via-teal-400 to-emerald-400 bg-clip-text text-transparent">محبوب‌ترین ترانه‌ها</span>
+            <span class="block text-3xl md:text-5xl mt-2">با کیفیت استودیویی</span>
+          </h1>
+          <p class="text-lg md:text-xl text-slate-400 mb-10 max-w-2xl mx-auto leading-relaxed">
+            هر هفته آهنگ‌های جدید با بهترین کیفیت ضبط و تنظیم حرفه‌ای. تجربه‌ای نزدیک به اجرای زنده.          </p>
+          <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <a href="#latest" class="px-8 py-3.5 rounded-xl bg-gradient-to-r from-cyan-600 to-teal-600 text-white font-semibold hover:shadow-lg hover:shadow-purple-500/25 transition-all hover:-translate-y-1 flex items-center gap-2">
+              <i data-lucide="headphones" class="w-5 h-5"></i>آهنگ‌های جدید            </a>
+                      </div>
+        </div>
+      </div>
+            <div class="hero-slide">
+        <div>
+          <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 mb-6">
+            <i data-lucide="heart" class="w-4 h-4 text-purple-400"></i>
+            <span class="text-sm text-slate-300">موسیقی برای لحظات خاص</span>
+          </div>
+          <h1 class="text-4xl md:text-6xl lg:text-7xl font-extrabold leading-tight mb-6">
+            <span class="block">موسیقی بیکلام</span>
+            <span class="bg-gradient-to-r from-rose-400 via-pink-400 to-orange-400 bg-clip-text text-transparent">برای لحظات خاص</span>
+            <span class="block text-3xl md:text-5xl mt-2">آرامش و احساس</span>
+          </h1>
+          <p class="text-lg md:text-xl text-slate-400 mb-10 max-w-2xl mx-auto leading-relaxed">
+            آرامش را با نواهای بیکلام تجربه کنید. مجموعه‌ای از احساس‌آمیزترین قطعات برای کار، مطالعه و لحظات ناب.          </p>
+          <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <a href="#popular" class="px-8 py-3.5 rounded-xl bg-gradient-to-r from-rose-600 to-orange-600 text-white font-semibold hover:shadow-lg hover:shadow-purple-500/25 transition-all hover:-translate-y-1 flex items-center gap-2">
+              <i data-lucide="trending-up" class="w-5 h-5"></i>پرطرفدارترین‌ها            </a>
+                      </div>
+        </div>
+      </div>
+          </div>
+    <button id="heroPrev" class="absolute right-4 top-1/2 -translate-y-1/2 z-20 p-2.5 rounded-full bg-white/5 border border-white/10 text-slate-300 hover:bg-white/10 hover:text-white transition-all hover:scale-110 backdrop-blur-sm">
+      <i data-lucide="chevron-right" class="w-5 h-5"></i>
+    </button>
+    <button id="heroNext" class="absolute left-4 top-1/2 -translate-y-1/2 z-20 p-2.5 rounded-full bg-white/5 border border-white/10 text-slate-300 hover:bg-white/10 hover:text-white transition-all hover:scale-110 backdrop-blur-sm">
+      <i data-lucide="chevron-left" class="w-5 h-5"></i>
+    </button>
+    <div id="heroDots" class="absolute bottom-24 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2"></div>
+    <div id="scrollHint" class="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
+      <i data-lucide="chevron-down" class="w-6 h-6 text-slate-500"></i>
+    </div>
+  </section>
+
+  <!-- ===== Latest Songs ===== -->
+  <section id="latest" class="py-24 relative">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-16" data-aos="fade-up">
+        <h2 class="text-3xl md:text-4xl font-bold mb-4">جدیدترین آهنگ‌ها</h2>
+        <p class="text-slate-400">تازه‌ترین تنظیم‌های بیکلام منتشر شده</p>
+      </div>
+      <div id="latestSongsGrid" class="transition-opacity duration-200 opacity-100">
+        <div class="page-0 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div class="group relative bg-white/5 border border-white/10 rounded-2xl overflow-hidden hover:-translate-y-1 transition-all duration-300 hover:shadow-2xl hover:shadow-purple-500/10 card-glow" data-aos="fade-up"><div class="relative aspect-video overflow-hidden"><img src="http://static.photos/abstract/640x360/1" alt="آهنگ معروف ۱" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy"><button onclick="playPreview('آهنگ معروف ۱','محمدرضا شجریان','http://static.photos/abstract/640x360/1','https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3')" class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center cursor-pointer"><span class="p-3 rounded-full bg-white/20 backdrop-blur hover:bg-white/30 transition-colors"><i data-lucide="play" class="w-5 h-5 fill-current"></i></span></button></div><div class="p-5"><h3 class="text-lg font-bold mb-1">آهنگ معروف ۱</h3><p class="text-sm text-slate-400 mb-4">محمدرضا شجریان</p><div class="flex items-center justify-between"><span class="text-purple-300 font-bold text-sm">150,000 تومان</span><div class="flex gap-2"><button onclick="openSongModal(1)" class="px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-slate-400 text-xs hover:bg-white/10 transition-colors cursor-pointer">جزئیات</button><button onclick="addToCart(1)" class="px-3 py-1.5 rounded-lg bg-purple-600/20 text-purple-300 text-xs font-medium hover:bg-purple-600 hover:text-white transition-colors border border-purple-500/30 cursor-pointer">خرید</button></div></div></div></div><div class="group relative bg-white/5 border border-white/10 rounded-2xl overflow-hidden hover:-translate-y-1 transition-all duration-300 hover:shadow-2xl hover:shadow-purple-500/10 card-glow" data-aos="fade-up"><div class="relative aspect-video overflow-hidden"><img src="http://static.photos/technology/640x360/2" alt="قطعه عاشقانه ۲" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy"><button onclick="playPreview('قطعه عاشقانه ۲','همایون شجریان','http://static.photos/technology/640x360/2','https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3')" class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center cursor-pointer"><span class="p-3 rounded-full bg-white/20 backdrop-blur hover:bg-white/30 transition-colors"><i data-lucide="play" class="w-5 h-5 fill-current"></i></span></button></div><div class="p-5"><h3 class="text-lg font-bold mb-1">قطعه عاشقانه ۲</h3><p class="text-sm text-slate-400 mb-4">همایون شجریان</p><div class="flex items-center justify-between"><span class="text-purple-300 font-bold text-sm">180,000 تومان</span><div class="flex gap-2"><button onclick="openSongModal(2)" class="px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-slate-400 text-xs hover:bg-white/10 transition-colors cursor-pointer">جزئیات</button><button onclick="addToCart(2)" class="px-3 py-1.5 rounded-lg bg-purple-600/20 text-purple-300 text-xs font-medium hover:bg-purple-600 hover:text-white transition-colors border border-purple-500/30 cursor-pointer">خرید</button></div></div></div></div><div class="group relative bg-white/5 border border-white/10 rounded-2xl overflow-hidden hover:-translate-y-1 transition-all duration-300 hover:shadow-2xl hover:shadow-purple-500/10 card-glow" data-aos="fade-up"><div class="relative aspect-video overflow-hidden"><img src="http://static.photos/nature/640x360/3" alt="موسیقی بی‌کلام ۳" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy"><button onclick="playPreview('موسیقی بی‌کلام ۳','محسن نامجو','http://static.photos/nature/640x360/3','https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3')" class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center cursor-pointer"><span class="p-3 rounded-full bg-white/20 backdrop-blur hover:bg-white/30 transition-colors"><i data-lucide="play" class="w-5 h-5 fill-current"></i></span></button></div><div class="p-5"><h3 class="text-lg font-bold mb-1">موسیقی بی‌کلام ۳</h3><p class="text-sm text-slate-400 mb-4">محسن نامجو</p><div class="flex items-center justify-between"><span class="text-purple-300 font-bold text-sm">165,000 تومان</span><div class="flex gap-2"><button onclick="openSongModal(3)" class="px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-slate-400 text-xs hover:bg-white/10 transition-colors cursor-pointer">جزئیات</button><button onclick="addToCart(3)" class="px-3 py-1.5 rounded-lg bg-purple-600/20 text-purple-300 text-xs font-medium hover:bg-purple-600 hover:text-white transition-colors border border-purple-500/30 cursor-pointer">خرید</button></div></div></div></div><div class="group relative bg-white/5 border border-white/10 rounded-2xl overflow-hidden hover:-translate-y-1 transition-all duration-300 hover:shadow-2xl hover:shadow-purple-500/10 card-glow" data-aos="fade-up"><div class="relative aspect-video overflow-hidden"><img src="http://static.photos/cityscape/640x360/4" alt="بازسازی خاطره ۴" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy"><button onclick="playPreview('بازسازی خاطره ۴','داریوش','http://static.photos/cityscape/640x360/4','https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3')" class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center cursor-pointer"><span class="p-3 rounded-full bg-white/20 backdrop-blur hover:bg-white/30 transition-colors"><i data-lucide="play" class="w-5 h-5 fill-current"></i></span></button></div><div class="p-5"><h3 class="text-lg font-bold mb-1">بازسازی خاطره ۴</h3><p class="text-sm text-slate-400 mb-4">داریوش</p><div class="flex items-center justify-between"><span class="text-purple-300 font-bold text-sm">155,000 تومان</span><div class="flex gap-2"><button onclick="openSongModal(4)" class="px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-slate-400 text-xs hover:bg-white/10 transition-colors cursor-pointer">جزئیات</button><button onclick="addToCart(4)" class="px-3 py-1.5 rounded-lg bg-purple-600/20 text-purple-300 text-xs font-medium hover:bg-purple-600 hover:text-white transition-colors border border-purple-500/30 cursor-pointer">خرید</button></div></div></div></div><div class="group relative bg-white/5 border border-white/10 rounded-2xl overflow-hidden hover:-translate-y-1 transition-all duration-300 hover:shadow-2xl hover:shadow-purple-500/10 card-glow" data-aos="fade-up"><div class="relative aspect-video overflow-hidden"><img src="http://static.photos/minimal/640x360/5" alt="قطعه غمگین ۵" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy"><button onclick="playPreview('قطعه غمگین ۵','ابی','http://static.photos/minimal/640x360/5','https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3')" class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center cursor-pointer"><span class="p-3 rounded-full bg-white/20 backdrop-blur hover:bg-white/30 transition-colors"><i data-lucide="play" class="w-5 h-5 fill-current"></i></span></button></div><div class="p-5"><h3 class="text-lg font-bold mb-1">قطعه غمگین ۵</h3><p class="text-sm text-slate-400 mb-4">ابی</p><div class="flex items-center justify-between"><span class="text-purple-300 font-bold text-sm">190,000 تومان</span><div class="flex gap-2"><button onclick="openSongModal(5)" class="px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-slate-400 text-xs hover:bg-white/10 transition-colors cursor-pointer">جزئیات</button><button onclick="addToCart(5)" class="px-3 py-1.5 rounded-lg bg-purple-600/20 text-purple-300 text-xs font-medium hover:bg-purple-600 hover:text-white transition-colors border border-purple-500/30 cursor-pointer">خرید</button></div></div></div></div><div class="group relative bg-white/5 border border-white/10 rounded-2xl overflow-hidden hover:-translate-y-1 transition-all duration-300 hover:shadow-2xl hover:shadow-purple-500/10 card-glow" data-aos="fade-up"><div class="relative aspect-video overflow-hidden"><img src="http://static.photos/indoor/640x360/6" alt="تنظیم جدید ۶" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy"><button onclick="playPreview('تنظیم جدید ۶','گوگوش','http://static.photos/indoor/640x360/6','https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3')" class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center cursor-pointer"><span class="p-3 rounded-full bg-white/20 backdrop-blur hover:bg-white/30 transition-colors"><i data-lucide="play" class="w-5 h-5 fill-current"></i></span></button></div><div class="p-5"><h3 class="text-lg font-bold mb-1">تنظیم جدید ۶</h3><p class="text-sm text-slate-400 mb-4">گوگوش</p><div class="flex items-center justify-between"><span class="text-purple-300 font-bold text-sm">170,000 تومان</span><div class="flex gap-2"><button onclick="openSongModal(6)" class="px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-slate-400 text-xs hover:bg-white/10 transition-colors cursor-pointer">جزئیات</button><button onclick="addToCart(6)" class="px-3 py-1.5 rounded-lg bg-purple-600/20 text-purple-300 text-xs font-medium hover:bg-purple-600 hover:text-white transition-colors border border-purple-500/30 cursor-pointer">خرید</button></div></div></div></div>        </div>
+        <div class="page-1 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" style="display:none">
+          <div class="group relative bg-white/5 border border-white/10 rounded-2xl overflow-hidden hover:-translate-y-1 transition-all duration-300 hover:shadow-2xl hover:shadow-purple-500/10 card-glow" data-aos="fade-up"><div class="relative aspect-video overflow-hidden"><img src="http://static.photos/workspace/640x360/7" alt="راک بیکلام ۷" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy"><button onclick="playPreview('راک بیکلام ۷','کوروش یغمایی','http://static.photos/workspace/640x360/7','https://www.soundhelix.com/examples/mp3/SoundHelix-Song-7.mp3')" class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center cursor-pointer"><span class="p-3 rounded-full bg-white/20 backdrop-blur hover:bg-white/30 transition-colors"><i data-lucide="play" class="w-5 h-5 fill-current"></i></span></button></div><div class="p-5"><h3 class="text-lg font-bold mb-1">راک بیکلام ۷</h3><p class="text-sm text-slate-400 mb-4">کوروش یغمایی</p><div class="flex items-center justify-between"><span class="text-purple-300 font-bold text-sm">200,000 تومان</span><div class="flex gap-2"><button onclick="openSongModal(7)" class="px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-slate-400 text-xs hover:bg-white/10 transition-colors cursor-pointer">جزئیات</button><button onclick="addToCart(7)" class="px-3 py-1.5 rounded-lg bg-purple-600/20 text-purple-300 text-xs font-medium hover:bg-purple-600 hover:text-white transition-colors border border-purple-500/30 cursor-pointer">خرید</button></div></div></div></div><div class="group relative bg-white/5 border border-white/10 rounded-2xl overflow-hidden hover:-translate-y-1 transition-all duration-300 hover:shadow-2xl hover:shadow-purple-500/10 card-glow" data-aos="fade-up"><div class="relative aspect-video overflow-hidden"><img src="http://static.photos/food/640x360/8" alt="پاپ اینسترومنتال ۸" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy"><button onclick="playPreview('پاپ اینسترومنتال ۸','بنیامین بهادری','http://static.photos/food/640x360/8','https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3')" class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center cursor-pointer"><span class="p-3 rounded-full bg-white/20 backdrop-blur hover:bg-white/30 transition-colors"><i data-lucide="play" class="w-5 h-5 fill-current"></i></span></button></div><div class="p-5"><h3 class="text-lg font-bold mb-1">پاپ اینسترومنتال ۸</h3><p class="text-sm text-slate-400 mb-4">بنیامین بهادری</p><div class="flex items-center justify-between"><span class="text-purple-300 font-bold text-sm">150,000 تومان</span><div class="flex gap-2"><button onclick="openSongModal(8)" class="px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-slate-400 text-xs hover:bg-white/10 transition-colors cursor-pointer">جزئیات</button><button onclick="addToCart(8)" class="px-3 py-1.5 rounded-lg bg-purple-600/20 text-purple-300 text-xs font-medium hover:bg-purple-600 hover:text-white transition-colors border border-purple-500/30 cursor-pointer">خرید</button></div></div></div></div><div class="group relative bg-white/5 border border-white/10 rounded-2xl overflow-hidden hover:-translate-y-1 transition-all duration-300 hover:shadow-2xl hover:shadow-purple-500/10 card-glow" data-aos="fade-up"><div class="relative aspect-video overflow-hidden"><img src="http://static.photos/travel/640x360/9" alt="ترانه ماندگار ۹" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy"><button onclick="playPreview('ترانه ماندگار ۹','سالار عقیلی','http://static.photos/travel/640x360/9','https://www.soundhelix.com/examples/mp3/SoundHelix-Song-9.mp3')" class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center cursor-pointer"><span class="p-3 rounded-full bg-white/20 backdrop-blur hover:bg-white/30 transition-colors"><i data-lucide="play" class="w-5 h-5 fill-current"></i></span></button></div><div class="p-5"><h3 class="text-lg font-bold mb-1">ترانه ماندگار ۹</h3><p class="text-sm text-slate-400 mb-4">سالار عقیلی</p><div class="flex items-center justify-between"><span class="text-purple-300 font-bold text-sm">175,000 تومان</span><div class="flex gap-2"><button onclick="openSongModal(9)" class="px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-slate-400 text-xs hover:bg-white/10 transition-colors cursor-pointer">جزئیات</button><button onclick="addToCart(9)" class="px-3 py-1.5 rounded-lg bg-purple-600/20 text-purple-300 text-xs font-medium hover:bg-purple-600 hover:text-white transition-colors border border-purple-500/30 cursor-pointer">خرید</button></div></div></div></div><div class="group relative bg-white/5 border border-white/10 rounded-2xl overflow-hidden hover:-translate-y-1 transition-all duration-300 hover:shadow-2xl hover:shadow-purple-500/10 card-glow" data-aos="fade-up"><div class="relative aspect-video overflow-hidden"><img src="http://static.photos/textures/640x360/10" alt="موسیقی فیلم ۱۰" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy"><button onclick="playPreview('موسیقی فیلم ۱۰','فرامرز پایور','http://static.photos/textures/640x360/10','https://www.soundhelix.com/examples/mp3/SoundHelix-Song-10.mp3')" class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center cursor-pointer"><span class="p-3 rounded-full bg-white/20 backdrop-blur hover:bg-white/30 transition-colors"><i data-lucide="play" class="w-5 h-5 fill-current"></i></span></button></div><div class="p-5"><h3 class="text-lg font-bold mb-1">موسیقی فیلم ۱۰</h3><p class="text-sm text-slate-400 mb-4">فرامرز پایور</p><div class="flex items-center justify-between"><span class="text-purple-300 font-bold text-sm">220,000 تومان</span><div class="flex gap-2"><button onclick="openSongModal(10)" class="px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-slate-400 text-xs hover:bg-white/10 transition-colors cursor-pointer">جزئیات</button><button onclick="addToCart(10)" class="px-3 py-1.5 rounded-lg bg-purple-600/20 text-purple-300 text-xs font-medium hover:bg-purple-600 hover:text-white transition-colors border border-purple-500/30 cursor-pointer">خرید</button></div></div></div></div><div class="group relative bg-white/5 border border-white/10 rounded-2xl overflow-hidden hover:-translate-y-1 transition-all duration-300 hover:shadow-2xl hover:shadow-purple-500/10 card-glow" data-aos="fade-up"><div class="relative aspect-video overflow-hidden"><img src="http://static.photos/industry/640x360/11" alt="قطعه سنتی ۱۱" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy"><button onclick="playPreview('قطعه سنتی ۱۱','حسین علیزاده','http://static.photos/industry/640x360/11','https://www.soundhelix.com/examples/mp3/SoundHelix-Song-11.mp3')" class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center cursor-pointer"><span class="p-3 rounded-full bg-white/20 backdrop-blur hover:bg-white/30 transition-colors"><i data-lucide="play" class="w-5 h-5 fill-current"></i></span></button></div><div class="p-5"><h3 class="text-lg font-bold mb-1">قطعه سنتی ۱۱</h3><p class="text-sm text-slate-400 mb-4">حسین علیزاده</p><div class="flex items-center justify-between"><span class="text-purple-300 font-bold text-sm">210,000 تومان</span><div class="flex gap-2"><button onclick="openSongModal(11)" class="px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-slate-400 text-xs hover:bg-white/10 transition-colors cursor-pointer">جزئیات</button><button onclick="addToCart(11)" class="px-3 py-1.5 rounded-lg bg-purple-600/20 text-purple-300 text-xs font-medium hover:bg-purple-600 hover:text-white transition-colors border border-purple-500/30 cursor-pointer">خرید</button></div></div></div></div><div class="group relative bg-white/5 border border-white/10 rounded-2xl overflow-hidden hover:-translate-y-1 transition-all duration-300 hover:shadow-2xl hover:shadow-purple-500/10 card-glow" data-aos="fade-up"><div class="relative aspect-video overflow-hidden"><img src="http://static.photos/outdoor/640x360/12" alt="بیکلام جاز ۱۲" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy"><button onclick="playPreview('بیکلام جاز ۱۲','فرهنگ مهر','http://static.photos/outdoor/640x360/12','https://www.soundhelix.com/examples/mp3/SoundHelix-Song-12.mp3')" class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center cursor-pointer"><span class="p-3 rounded-full bg-white/20 backdrop-blur hover:bg-white/30 transition-colors"><i data-lucide="play" class="w-5 h-5 fill-current"></i></span></button></div><div class="p-5"><h3 class="text-lg font-bold mb-1">بیکلام جاز ۱۲</h3><p class="text-sm text-slate-400 mb-4">فرهنگ مهر</p><div class="flex items-center justify-between"><span class="text-purple-300 font-bold text-sm">195,000 تومان</span><div class="flex gap-2"><button onclick="openSongModal(12)" class="px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-slate-400 text-xs hover:bg-white/10 transition-colors cursor-pointer">جزئیات</button><button onclick="addToCart(12)" class="px-3 py-1.5 rounded-lg bg-purple-600/20 text-purple-300 text-xs font-medium hover:bg-purple-600 hover:text-white transition-colors border border-purple-500/30 cursor-pointer">خرید</button></div></div></div></div>        </div>
+        <div class="page-2 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6" style="display:none">
+          <div class="group relative bg-white/5 border border-white/10 rounded-2xl overflow-hidden hover:-translate-y-1 transition-all duration-300 hover:shadow-2xl hover:shadow-purple-500/10 card-glow" data-aos="fade-up"><div class="relative aspect-video overflow-hidden"><img src="http://static.photos/studio/640x360/13" alt="مینیمال ۱۳" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy"><button onclick="playPreview('مینیمال ۱۳','سینا سرلک','http://static.photos/studio/640x360/13','https://www.soundhelix.com/examples/mp3/SoundHelix-Song-13.mp3')" class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center cursor-pointer"><span class="p-3 rounded-full bg-white/20 backdrop-blur hover:bg-white/30 transition-colors"><i data-lucide="play" class="w-5 h-5 fill-current"></i></span></button></div><div class="p-5"><h3 class="text-lg font-bold mb-1">مینیمال ۱۳</h3><p class="text-sm text-slate-400 mb-4">سینا سرلک</p><div class="flex items-center justify-between"><span class="text-purple-300 font-bold text-sm">145,000 تومان</span><div class="flex gap-2"><button onclick="openSongModal(13)" class="px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-slate-400 text-xs hover:bg-white/10 transition-colors cursor-pointer">جزئیات</button><button onclick="addToCart(13)" class="px-3 py-1.5 rounded-lg bg-purple-600/20 text-purple-300 text-xs font-medium hover:bg-purple-600 hover:text-white transition-colors border border-purple-500/30 cursor-pointer">خرید</button></div></div></div></div><div class="group relative bg-white/5 border border-white/10 rounded-2xl overflow-hidden hover:-translate-y-1 transition-all duration-300 hover:shadow-2xl hover:shadow-purple-500/10 card-glow" data-aos="fade-up"><div class="relative aspect-video overflow-hidden"><img src="http://static.photos/science/640x360/14" alt="همای ۱۴" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy"><button onclick="playPreview('همای ۱۴','پرواز همای','http://static.photos/science/640x360/14','https://www.soundhelix.com/examples/mp3/SoundHelix-Song-14.mp3')" class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center cursor-pointer"><span class="p-3 rounded-full bg-white/20 backdrop-blur hover:bg-white/30 transition-colors"><i data-lucide="play" class="w-5 h-5 fill-current"></i></span></button></div><div class="p-5"><h3 class="text-lg font-bold mb-1">همای ۱۴</h3><p class="text-sm text-slate-400 mb-4">پرواز همای</p><div class="flex items-center justify-between"><span class="text-purple-300 font-bold text-sm">230,000 تومان</span><div class="flex gap-2"><button onclick="openSongModal(14)" class="px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-slate-400 text-xs hover:bg-white/10 transition-colors cursor-pointer">جزئیات</button><button onclick="addToCart(14)" class="px-3 py-1.5 rounded-lg bg-purple-600/20 text-purple-300 text-xs font-medium hover:bg-purple-600 hover:text-white transition-colors border border-purple-500/30 cursor-pointer">خرید</button></div></div></div></div><div class="group relative bg-white/5 border border-white/10 rounded-2xl overflow-hidden hover:-translate-y-1 transition-all duration-300 hover:shadow-2xl hover:shadow-purple-500/10 card-glow" data-aos="fade-up"><div class="relative aspect-video overflow-hidden"><img src="http://static.photos/legal/640x360/15" alt="پیانو سولو ۱۵" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy"><button onclick="playPreview('پیانو سولو ۱۵','لیلا فروهر','http://static.photos/legal/640x360/15','https://www.soundhelix.com/examples/mp3/SoundHelix-Song-15.mp3')" class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center cursor-pointer"><span class="p-3 rounded-full bg-white/20 backdrop-blur hover:bg-white/30 transition-colors"><i data-lucide="play" class="w-5 h-5 fill-current"></i></span></button></div><div class="p-5"><h3 class="text-lg font-bold mb-1">پیانو سولو ۱۵</h3><p class="text-sm text-slate-400 mb-4">لیلا فروهر</p><div class="flex items-center justify-between"><span class="text-purple-300 font-bold text-sm">160,000 تومان</span><div class="flex gap-2"><button onclick="openSongModal(15)" class="px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-slate-400 text-xs hover:bg-white/10 transition-colors cursor-pointer">جزئیات</button><button onclick="addToCart(15)" class="px-3 py-1.5 rounded-lg bg-purple-600/20 text-purple-300 text-xs font-medium hover:bg-purple-600 hover:text-white transition-colors border border-purple-500/30 cursor-pointer">خرید</button></div></div></div></div><div class="group relative bg-white/5 border border-white/10 rounded-2xl overflow-hidden hover:-translate-y-1 transition-all duration-300 hover:shadow-2xl hover:shadow-purple-500/10 card-glow" data-aos="fade-up"><div class="relative aspect-video overflow-hidden"><img src="http://static.photos/estate/640x360/16" alt="ویولن عاشقانه ۱۶" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy"><button onclick="playPreview('ویولن عاشقانه ۱۶','ستار','http://static.photos/estate/640x360/16','https://www.soundhelix.com/examples/mp3/SoundHelix-Song-16.mp3')" class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center cursor-pointer"><span class="p-3 rounded-full bg-white/20 backdrop-blur hover:bg-white/30 transition-colors"><i data-lucide="play" class="w-5 h-5 fill-current"></i></span></button></div><div class="p-5"><h3 class="text-lg font-bold mb-1">ویولن عاشقانه ۱۶</h3><p class="text-sm text-slate-400 mb-4">ستار</p><div class="flex items-center justify-between"><span class="text-purple-300 font-bold text-sm">185,000 تومان</span><div class="flex gap-2"><button onclick="openSongModal(16)" class="px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-slate-400 text-xs hover:bg-white/10 transition-colors cursor-pointer">جزئیات</button><button onclick="addToCart(16)" class="px-3 py-1.5 rounded-lg bg-purple-600/20 text-purple-300 text-xs font-medium hover:bg-purple-600 hover:text-white transition-colors border border-purple-500/30 cursor-pointer">خرید</button></div></div></div></div><div class="group relative bg-white/5 border border-white/10 rounded-2xl overflow-hidden hover:-translate-y-1 transition-all duration-300 hover:shadow-2xl hover:shadow-purple-500/10 card-glow" data-aos="fade-up"><div class="relative aspect-video overflow-hidden"><img src="http://static.photos/restaurant/640x360/17" alt="گیتار کلاسیک ۱۷" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy"><button onclick="playPreview('گیتار کلاسیک ۱۷','مهستی','http://static.photos/restaurant/640x360/17','https://www.soundhelix.com/examples/mp3/SoundHelix-Song-17.mp3')" class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center cursor-pointer"><span class="p-3 rounded-full bg-white/20 backdrop-blur hover:bg-white/30 transition-colors"><i data-lucide="play" class="w-5 h-5 fill-current"></i></span></button></div><div class="p-5"><h3 class="text-lg font-bold mb-1">گیتار کلاسیک ۱۷</h3><p class="text-sm text-slate-400 mb-4">مهستی</p><div class="flex items-center justify-between"><span class="text-purple-300 font-bold text-sm">170,000 تومان</span><div class="flex gap-2"><button onclick="openSongModal(17)" class="px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-slate-400 text-xs hover:bg-white/10 transition-colors cursor-pointer">جزئیات</button><button onclick="addToCart(17)" class="px-3 py-1.5 rounded-lg bg-purple-600/20 text-purple-300 text-xs font-medium hover:bg-purple-600 hover:text-white transition-colors border border-purple-500/30 cursor-pointer">خرید</button></div></div></div></div><div class="group relative bg-white/5 border border-white/10 rounded-2xl overflow-hidden hover:-translate-y-1 transition-all duration-300 hover:shadow-2xl hover:shadow-purple-500/10 card-glow" data-aos="fade-up"><div class="relative aspect-video overflow-hidden"><img src="http://static.photos/retail/640x360/18" alt="سازی از خاطرات ۱۸" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy"><button onclick="playPreview('سازی از خاطرات ۱۸','شهرام ناظری','http://static.photos/retail/640x360/18','https://www.soundhelix.com/examples/mp3/SoundHelix-Song-18.mp3')" class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center cursor-pointer"><span class="p-3 rounded-full bg-white/20 backdrop-blur hover:bg-white/30 transition-colors"><i data-lucide="play" class="w-5 h-5 fill-current"></i></span></button></div><div class="p-5"><h3 class="text-lg font-bold mb-1">سازی از خاطرات ۱۸</h3><p class="text-sm text-slate-400 mb-4">شهرام ناظری</p><div class="flex items-center justify-between"><span class="text-purple-300 font-bold text-sm">205,000 تومان</span><div class="flex gap-2"><button onclick="openSongModal(18)" class="px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-slate-400 text-xs hover:bg-white/10 transition-colors cursor-pointer">جزئیات</button><button onclick="addToCart(18)" class="px-3 py-1.5 rounded-lg bg-purple-600/20 text-purple-300 text-xs font-medium hover:bg-purple-600 hover:text-white transition-colors border border-purple-500/30 cursor-pointer">خرید</button></div></div></div></div>        </div>
+      </div>
+      <div class="flex items-center justify-center gap-2 mt-12" dir="ltr">
+        <button class="pagination-btn w-10 h-10 rounded-lg bg-purple-600 text-white font-medium transition-all" data-page="0">1</button>
+        <button class="pagination-btn w-10 h-10 rounded-lg bg-white/5 border border-white/10 text-slate-300 hover:bg-white/10 font-medium transition-all" data-page="1">2</button>
+        <button class="pagination-btn w-10 h-10 rounded-lg bg-white/5 border border-white/10 text-slate-300 hover:bg-white/10 font-medium transition-all" data-page="2">3</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Best Sellers ===== -->
+  <section id="bestsellers" class="py-24 border-t border-white/5 bg-gradient-to-b from-slate-950 to-slate-900/50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center gap-3 mb-12" data-aos="fade-left">
+        <div class="p-2 rounded-lg bg-orange-500/10 text-orange-500"><i data-lucide="flame" class="w-6 h-6"></i></div>
+        <div>
+          <h2 class="text-3xl md:text-4xl font-bold">آهنگ‌های پرفروش</h2>
+          <p class="text-slate-400 text-sm mt-1">محبوب‌ترین‌ها نزد خریداران</p>
+        </div>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div class="group relative bg-white/5 border border-white/10 rounded-2xl overflow-hidden hover:-translate-y-1 transition-all duration-300 hover:shadow-2xl hover:shadow-purple-500/10 card-glow" data-aos="fade-up"><div class="absolute top-3 right-3 px-2.5 py-1 rounded-md text-xs font-bold bg-slate-950/80 backdrop-blur text-white border border-white/10 flex items-center gap-1 z-10"><i data-lucide="flame" class="w-3 h-3 text-orange-400"></i>پرفروش</div><div class="relative aspect-video overflow-hidden"><img src="http://static.photos/blurred/640x360/21" alt="سوغاتی" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy"><button onclick="playPreview('سوغاتی','ابی','http://static.photos/blurred/640x360/21','https://www.soundhelix.com/examples/mp3/SoundHelix-Song-101.mp3')" class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center cursor-pointer"><span class="p-3 rounded-full bg-white/20 backdrop-blur hover:bg-white/30 transition-colors"><i data-lucide="play" class="w-5 h-5 fill-current"></i></span></button></div><div class="p-5"><h3 class="text-lg font-bold mb-1">سوغاتی</h3><p class="text-sm text-slate-400 mb-4">ابی</p><div class="flex items-center justify-between"><span class="text-purple-300 font-bold text-sm">299,000 تومان</span><div class="flex gap-2"><button onclick="openSongModal(101)" class="px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-slate-400 text-xs hover:bg-white/10 transition-colors cursor-pointer">جزئیات</button><button onclick="addToCart(101)" class="px-3 py-1.5 rounded-lg bg-purple-600/20 text-purple-300 text-xs font-medium hover:bg-purple-600 hover:text-white transition-colors border border-purple-500/30 cursor-pointer">خرید</button></div></div></div></div><div class="group relative bg-white/5 border border-white/10 rounded-2xl overflow-hidden hover:-translate-y-1 transition-all duration-300 hover:shadow-2xl hover:shadow-purple-500/10 card-glow" data-aos="fade-up"><div class="absolute top-3 right-3 px-2.5 py-1 rounded-md text-xs font-bold bg-slate-950/80 backdrop-blur text-white border border-white/10 flex items-center gap-1 z-10"><i data-lucide="flame" class="w-3 h-3 text-orange-400"></i>پرفروش</div><div class="relative aspect-video overflow-hidden"><img src="http://static.photos/bokeh/640x360/22" alt="موج آبی" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy"><button onclick="playPreview('موج آبی','داریوش','http://static.photos/bokeh/640x360/22','https://www.soundhelix.com/examples/mp3/SoundHelix-Song-102.mp3')" class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center cursor-pointer"><span class="p-3 rounded-full bg-white/20 backdrop-blur hover:bg-white/30 transition-colors"><i data-lucide="play" class="w-5 h-5 fill-current"></i></span></button></div><div class="p-5"><h3 class="text-lg font-bold mb-1">موج آبی</h3><p class="text-sm text-slate-400 mb-4">داریوش</p><div class="flex items-center justify-between"><span class="text-purple-300 font-bold text-sm">289,000 تومان</span><div class="flex gap-2"><button onclick="openSongModal(102)" class="px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-slate-400 text-xs hover:bg-white/10 transition-colors cursor-pointer">جزئیات</button><button onclick="addToCart(102)" class="px-3 py-1.5 rounded-lg bg-purple-600/20 text-purple-300 text-xs font-medium hover:bg-purple-600 hover:text-white transition-colors border border-purple-500/30 cursor-pointer">خرید</button></div></div></div></div><div class="group relative bg-white/5 border border-white/10 rounded-2xl overflow-hidden hover:-translate-y-1 transition-all duration-300 hover:shadow-2xl hover:shadow-purple-500/10 card-glow" data-aos="fade-up"><div class="absolute top-3 right-3 px-2.5 py-1 rounded-md text-xs font-bold bg-slate-950/80 backdrop-blur text-white border border-white/10 flex items-center gap-1 z-10"><i data-lucide="flame" class="w-3 h-3 text-orange-400"></i>پرفروش</div><div class="relative aspect-video overflow-hidden"><img src="http://static.photos/gradient/640x360/23" alt="خواننده خیابان" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy"><button onclick="playPreview('خواننده خیابان','سیامک عباسی','http://static.photos/gradient/640x360/23','https://www.soundhelix.com/examples/mp3/SoundHelix-Song-103.mp3')" class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center cursor-pointer"><span class="p-3 rounded-full bg-white/20 backdrop-blur hover:bg-white/30 transition-colors"><i data-lucide="play" class="w-5 h-5 fill-current"></i></span></button></div><div class="p-5"><h3 class="text-lg font-bold mb-1">خواننده خیابان</h3><p class="text-sm text-slate-400 mb-4">سیامک عباسی</p><div class="flex items-center justify-between"><span class="text-purple-300 font-bold text-sm">259,000 تومان</span><div class="flex gap-2"><button onclick="openSongModal(103)" class="px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-slate-400 text-xs hover:bg-white/10 transition-colors cursor-pointer">جزئیات</button><button onclick="addToCart(103)" class="px-3 py-1.5 rounded-lg bg-purple-600/20 text-purple-300 text-xs font-medium hover:bg-purple-600 hover:text-white transition-colors border border-purple-500/30 cursor-pointer">خرید</button></div></div></div></div><div class="group relative bg-white/5 border border-white/10 rounded-2xl overflow-hidden hover:-translate-y-1 transition-all duration-300 hover:shadow-2xl hover:shadow-purple-500/10 card-glow" data-aos="fade-up"><div class="absolute top-3 right-3 px-2.5 py-1 rounded-md text-xs font-bold bg-slate-950/80 backdrop-blur text-white border border-white/10 flex items-center gap-1 z-10"><i data-lucide="flame" class="w-3 h-3 text-orange-400"></i>پرفروش</div><div class="relative aspect-video overflow-hidden"><img src="http://static.photos/monochrome/640x360/24" alt="نصف شب" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy"><button onclick="playPreview('نصف شب','گوگوش','http://static.photos/monochrome/640x360/24','https://www.soundhelix.com/examples/mp3/SoundHelix-Song-104.mp3')" class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center cursor-pointer"><span class="p-3 rounded-full bg-white/20 backdrop-blur hover:bg-white/30 transition-colors"><i data-lucide="play" class="w-5 h-5 fill-current"></i></span></button></div><div class="p-5"><h3 class="text-lg font-bold mb-1">نصف شب</h3><p class="text-sm text-slate-400 mb-4">گوگوش</p><div class="flex items-center justify-between"><span class="text-purple-300 font-bold text-sm">275,000 تومان</span><div class="flex gap-2"><button onclick="openSongModal(104)" class="px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-slate-400 text-xs hover:bg-white/10 transition-colors cursor-pointer">جزئیات</button><button onclick="addToCart(104)" class="px-3 py-1.5 rounded-lg bg-purple-600/20 text-purple-300 text-xs font-medium hover:bg-purple-600 hover:text-white transition-colors border border-purple-500/30 cursor-pointer">خرید</button></div></div></div></div>      </div>
+    </div>
+  </section>
+
+  <!-- ===== Popular ===== -->
+  <section id="popular" class="py-24 border-t border-white/5">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center gap-3 mb-12" data-aos="fade-left">
+        <div class="p-2 rounded-lg bg-cyan-500/10 text-cyan-400"><i data-lucide="trending-up" class="w-6 h-6"></i></div>
+        <div>
+          <h2 class="text-3xl md:text-4xl font-bold">آهنگ‌های پرطرفدار</h2>
+          <p class="text-slate-400 text-sm mt-1">بیشترین بازدید و استریم</p>
+        </div>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div class="group relative bg-white/5 border border-white/10 rounded-2xl overflow-hidden hover:-translate-y-1 transition-all duration-300 hover:shadow-2xl hover:shadow-purple-500/10 card-glow" data-aos="fade-up"><div class="absolute top-3 right-3 px-2.5 py-1 rounded-md text-xs font-bold bg-slate-950/80 backdrop-blur text-white border border-white/10 flex items-center gap-1 z-10"><i data-lucide="trending-up" class="w-3 h-3 text-cyan-400"></i>پرطرفدار</div><div class="relative aspect-video overflow-hidden"><img src="http://static.photos/vintage/640x360/31" alt="باران" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy"><button onclick="playPreview('باران','فرهاد مهراد','http://static.photos/vintage/640x360/31','https://www.soundhelix.com/examples/mp3/SoundHelix-Song-201.mp3')" class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center cursor-pointer"><span class="p-3 rounded-full bg-white/20 backdrop-blur hover:bg-white/30 transition-colors"><i data-lucide="play" class="w-5 h-5 fill-current"></i></span></button></div><div class="p-5"><h3 class="text-lg font-bold mb-1">باران</h3><p class="text-sm text-slate-400 mb-4">فرهاد مهراد</p><div class="flex items-center justify-between"><span class="text-purple-300 font-bold text-sm">199,000 تومان</span><div class="flex gap-2"><button onclick="openSongModal(201)" class="px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-slate-400 text-xs hover:bg-white/10 transition-colors cursor-pointer">جزئیات</button><button onclick="addToCart(201)" class="px-3 py-1.5 rounded-lg bg-purple-600/20 text-purple-300 text-xs font-medium hover:bg-purple-600 hover:text-white transition-colors border border-purple-500/30 cursor-pointer">خرید</button></div></div></div></div><div class="group relative bg-white/5 border border-white/10 rounded-2xl overflow-hidden hover:-translate-y-1 transition-all duration-300 hover:shadow-2xl hover:shadow-purple-500/10 card-glow" data-aos="fade-up"><div class="absolute top-3 right-3 px-2.5 py-1 rounded-md text-xs font-bold bg-slate-950/80 backdrop-blur text-white border border-white/10 flex items-center gap-1 z-10"><i data-lucide="trending-up" class="w-3 h-3 text-cyan-400"></i>پرطرفدار</div><div class="relative aspect-video overflow-hidden"><img src="http://static.photos/white/640x360/32" alt="لالایی" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy"><button onclick="playPreview('لالایی','محمدرضا شجریان','http://static.photos/white/640x360/32','https://www.soundhelix.com/examples/mp3/SoundHelix-Song-202.mp3')" class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center cursor-pointer"><span class="p-3 rounded-full bg-white/20 backdrop-blur hover:bg-white/30 transition-colors"><i data-lucide="play" class="w-5 h-5 fill-current"></i></span></button></div><div class="p-5"><h3 class="text-lg font-bold mb-1">لالایی</h3><p class="text-sm text-slate-400 mb-4">محمدرضا شجریان</p><div class="flex items-center justify-between"><span class="text-purple-300 font-bold text-sm">220,000 تومان</span><div class="flex gap-2"><button onclick="openSongModal(202)" class="px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-slate-400 text-xs hover:bg-white/10 transition-colors cursor-pointer">جزئیات</button><button onclick="addToCart(202)" class="px-3 py-1.5 rounded-lg bg-purple-600/20 text-purple-300 text-xs font-medium hover:bg-purple-600 hover:text-white transition-colors border border-purple-500/30 cursor-pointer">خرید</button></div></div></div></div><div class="group relative bg-white/5 border border-white/10 rounded-2xl overflow-hidden hover:-translate-y-1 transition-all duration-300 hover:shadow-2xl hover:shadow-purple-500/10 card-glow" data-aos="fade-up"><div class="absolute top-3 right-3 px-2.5 py-1 rounded-md text-xs font-bold bg-slate-950/80 backdrop-blur text-white border border-white/10 flex items-center gap-1 z-10"><i data-lucide="trending-up" class="w-3 h-3 text-cyan-400"></i>پرطرفدار</div><div class="relative aspect-video overflow-hidden"><img src="http://static.photos/black/640x360/33" alt="یار دبستانی" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy"><button onclick="playPreview('یار دبستانی','حسن شماعی‌زاده','http://static.photos/black/640x360/33','https://www.soundhelix.com/examples/mp3/SoundHelix-Song-203.mp3')" class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center cursor-pointer"><span class="p-3 rounded-full bg-white/20 backdrop-blur hover:bg-white/30 transition-colors"><i data-lucide="play" class="w-5 h-5 fill-current"></i></span></button></div><div class="p-5"><h3 class="text-lg font-bold mb-1">یار دبستانی</h3><p class="text-sm text-slate-400 mb-4">حسن شماعی‌زاده</p><div class="flex items-center justify-between"><span class="text-purple-300 font-bold text-sm">189,000 تومان</span><div class="flex gap-2"><button onclick="openSongModal(203)" class="px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-slate-400 text-xs hover:bg-white/10 transition-colors cursor-pointer">جزئیات</button><button onclick="addToCart(203)" class="px-3 py-1.5 rounded-lg bg-purple-600/20 text-purple-300 text-xs font-medium hover:bg-purple-600 hover:text-white transition-colors border border-purple-500/30 cursor-pointer">خرید</button></div></div></div></div><div class="group relative bg-white/5 border border-white/10 rounded-2xl overflow-hidden hover:-translate-y-1 transition-all duration-300 hover:shadow-2xl hover:shadow-purple-500/10 card-glow" data-aos="fade-up"><div class="absolute top-3 right-3 px-2.5 py-1 rounded-md text-xs font-bold bg-slate-950/80 backdrop-blur text-white border border-white/10 flex items-center gap-1 z-10"><i data-lucide="trending-up" class="w-3 h-3 text-cyan-400"></i>پرطرفدار</div><div class="relative aspect-video overflow-hidden"><img src="http://static.photos/blue/640x360/34" alt="صدای پای آب" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy"><button onclick="playPreview('صدای پای آب','همایون شجریان','http://static.photos/blue/640x360/34','https://www.soundhelix.com/examples/mp3/SoundHelix-Song-204.mp3')" class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center cursor-pointer"><span class="p-3 rounded-full bg-white/20 backdrop-blur hover:bg-white/30 transition-colors"><i data-lucide="play" class="w-5 h-5 fill-current"></i></span></button></div><div class="p-5"><h3 class="text-lg font-bold mb-1">صدای پای آب</h3><p class="text-sm text-slate-400 mb-4">همایون شجریان</p><div class="flex items-center justify-between"><span class="text-purple-300 font-bold text-sm">245,000 تومان</span><div class="flex gap-2"><button onclick="openSongModal(204)" class="px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-slate-400 text-xs hover:bg-white/10 transition-colors cursor-pointer">جزئیات</button><button onclick="addToCart(204)" class="px-3 py-1.5 rounded-lg bg-purple-600/20 text-purple-300 text-xs font-medium hover:bg-purple-600 hover:text-white transition-colors border border-purple-500/30 cursor-pointer">خرید</button></div></div></div></div>      </div>
+    </div>
+  </section>
+
+  <!-- ===== Testimonials ===== -->
+  <section id="testimonials" class="py-24 border-t border-white/5 bg-gradient-to-b from-slate-900/50 to-slate-950">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-16" data-aos="fade-up">
+        <h2 class="text-3xl md:text-4xl font-bold mb-4">نظرات خریداران</h2>
+        <p class="text-slate-400">آنچه دیگران درباره ما می‌گویند</p>
+      </div>
+      <div class="relative overflow-hidden" data-aos="fade-up">
+        <div id="testimonialTrack" class="testimonial-track">
+                              <div class="testimonial-card">
+            <div class="bg-white/5 border border-white/10 rounded-2xl p-6 h-full">
+              <div class="flex items-center gap-4 mb-4">
+                <div class="w-12 h-12 rounded-full bg-gradient-to-br from-purple-600 to-indigo-600 flex items-center justify-center text-white font-bold text-lg flex-shrink-0">س</div>
+                <div>
+                  <p class="font-bold text-sm">سارا محمدی</p>
+                  <div class="text-yellow-400 text-xs tracking-wider">★★★★★</div>
+                </div>
+              </div>
+              <p class="text-slate-400 text-sm leading-relaxed">"کیفیت تنظیم‌ها فوق‌العاده است. از خریدم کاملاً راضی هستم."</p>
+            </div>
+          </div>
+                    <div class="testimonial-card">
+            <div class="bg-white/5 border border-white/10 rounded-2xl p-6 h-full">
+              <div class="flex items-center gap-4 mb-4">
+                <div class="w-12 h-12 rounded-full bg-gradient-to-br from-cyan-600 to-teal-600 flex items-center justify-center text-white font-bold text-lg flex-shrink-0">ا</div>
+                <div>
+                  <p class="font-bold text-sm">امیر حسینی</p>
+                  <div class="text-yellow-400 text-xs tracking-wider">★★★★★</div>
+                </div>
+              </div>
+              <p class="text-slate-400 text-sm leading-relaxed">"دقیقاً همون چیزی که دنبالش می‌گشتم. موسیقی بیکلام با کیفیت عالی."</p>
+            </div>
+          </div>
+                    <div class="testimonial-card">
+            <div class="bg-white/5 border border-white/10 rounded-2xl p-6 h-full">
+              <div class="flex items-center gap-4 mb-4">
+                <div class="w-12 h-12 rounded-full bg-gradient-to-br from-rose-600 to-orange-600 flex items-center justify-center text-white font-bold text-lg flex-shrink-0">ز</div>
+                <div>
+                  <p class="font-bold text-sm">زهرا کریمی</p>
+                  <div class="text-yellow-400 text-xs tracking-wider">★★★★☆</div>
+                </div>
+              </div>
+              <p class="text-slate-400 text-sm leading-relaxed">"کیفیت فایل‌ها بی‌نظیر بود. حتماً دوباره خرید می‌کنم."</p>
+            </div>
+          </div>
+                    <div class="testimonial-card">
+            <div class="bg-white/5 border border-white/10 rounded-2xl p-6 h-full">
+              <div class="flex items-center gap-4 mb-4">
+                <div class="w-12 h-12 rounded-full bg-gradient-to-br from-emerald-600 to-teal-600 flex items-center justify-center text-white font-bold text-lg flex-shrink-0">م</div>
+                <div>
+                  <p class="font-bold text-sm">محمد رضایی</p>
+                  <div class="text-yellow-400 text-xs tracking-wider">★★★★★</div>
+                </div>
+              </div>
+              <p class="text-slate-400 text-sm leading-relaxed">"تنظیم‌های جدید و خلاقانه. حسابی لذت بردم."</p>
+            </div>
+          </div>
+                    <div class="testimonial-card">
+            <div class="bg-white/5 border border-white/10 rounded-2xl p-6 h-full">
+              <div class="flex items-center gap-4 mb-4">
+                <div class="w-12 h-12 rounded-full bg-gradient-to-br from-amber-600 to-orange-600 flex items-center justify-center text-white font-bold text-lg flex-shrink-0">ن</div>
+                <div>
+                  <p class="font-bold text-sm">نیلوفر احمدی</p>
+                  <div class="text-yellow-400 text-xs tracking-wider">★★★★★</div>
+                </div>
+              </div>
+              <p class="text-slate-400 text-sm leading-relaxed">"بهترین سایت موسیقی بیکلام که دیدم. تنوع و کیفیت عالی."</p>
+            </div>
+          </div>
+                    <div class="testimonial-card">
+            <div class="bg-white/5 border border-white/10 rounded-2xl p-6 h-full">
+              <div class="flex items-center gap-4 mb-4">
+                <div class="w-12 h-12 rounded-full bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center text-white font-bold text-lg flex-shrink-0">ر</div>
+                <div>
+                  <p class="font-bold text-sm">رضا طاهری</p>
+                  <div class="text-yellow-400 text-xs tracking-wider">★★★★☆</div>
+                </div>
+              </div>
+              <p class="text-slate-400 text-sm leading-relaxed">"پشتیبانی عالی و پاسخگویی سریع. موسیقی‌ها فوق‌العاده بودن."</p>
+            </div>
+          </div>
+                  </div>
+        <button id="testimonialPrev" class="absolute right-0 top-1/2 -translate-y-1/2 z-10 p-2 rounded-full bg-slate-900/80 border border-white/10 text-slate-300 hover:bg-white/10 transition-all"><i data-lucide="chevron-right" class="w-5 h-5"></i></button>
+        <button id="testimonialNext" class="absolute left-0 top-1/2 -translate-y-1/2 z-10 p-2 rounded-full bg-slate-900/80 border border-white/10 text-slate-300 hover:bg-white/10 transition-all"><i data-lucide="chevron-left" class="w-5 h-5"></i></button>
+      </div>
+      <div id="testimonialDots" class="flex items-center justify-center gap-2 mt-8">
+                <button class="hero-dot active" data-tindex="0"></button>
+                <button class="hero-dot" data-tindex="1"></button>
+                <button class="hero-dot" data-tindex="2"></button>
+                <button class="hero-dot" data-tindex="3"></button>
+                <button class="hero-dot" data-tindex="4"></button>
+                <button class="hero-dot" data-tindex="5"></button>
+              </div>
+    </div>
+  </section>
+
+  <!-- ===== Packages / Albums ===== -->
+  <section id="packages" class="py-24 border-t border-white/5 bg-gradient-to-b from-slate-950 to-slate-900/50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center gap-3 mb-12" data-aos="fade-left">
+        <div class="p-2 rounded-lg bg-emerald-500/10 text-emerald-400"><i data-lucide="album" class="w-6 h-6"></i></div>
+        <div>
+          <h2 class="text-3xl md:text-4xl font-bold">آلبوم‌ها و پکیج‌ها</h2>
+          <p class="text-slate-400 text-sm mt-1">مجموعه آهنگ‌های منتخب با قیمت ویژه</p>
+        </div>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="group bg-white/5 border border-white/10 rounded-2xl overflow-hidden hover:-translate-y-1 transition-all duration-300 hover:shadow-2xl hover:shadow-purple-500/10 card-glow" data-aos="fade-up"><div class="relative aspect-video overflow-hidden"><img src="http://static.photos/abstract/640x360/100" alt="آلبوم منتخب شماره ۱" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy"><div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 to-transparent"></div><div class="absolute bottom-3 right-3 left-3"><h3 class="text-lg font-bold text-white">آلبوم منتخب شماره ۱</h3><p class="text-xs text-slate-300 mt-0.5">6 قطعه</p></div></div><div class="p-4"><ul class="space-y-1 mb-4"><li class="text-xs text-slate-400 flex items-center gap-1.5"><i data-lucide="music" class="w-3 h-3 text-purple-400 flex-shrink-0"></i>محمدرضا شجریان — آهنگ معروف ۱</li><li class="text-xs text-slate-400 flex items-center gap-1.5"><i data-lucide="music" class="w-3 h-3 text-purple-400 flex-shrink-0"></i>همایون شجریان — قطعه عاشقانه ۲</li><li class="text-xs text-slate-400 flex items-center gap-1.5"><i data-lucide="music" class="w-3 h-3 text-purple-400 flex-shrink-0"></i>محسن نامجو — موسیقی بی‌کلام ۳</li><li class="text-xs text-slate-400 flex items-center gap-1.5"><i data-lucide="music" class="w-3 h-3 text-purple-400 flex-shrink-0"></i>داریوش — بازسازی خاطره ۴</li><li class="text-xs text-slate-400 flex items-center gap-1.5"><i data-lucide="music" class="w-3 h-3 text-purple-400 flex-shrink-0"></i>ابی — قطعه غمگین ۵</li><li class="text-xs text-slate-400 flex items-center gap-1.5"><i data-lucide="music" class="w-3 h-3 text-purple-400 flex-shrink-0"></i>گوگوش — تنظیم جدید ۶</li></ul><div class="flex items-center justify-between pt-3 border-t border-white/10"><span class="text-purple-300 font-bold">450,000 تومان</span><button onclick="addToCartPackage(1)" class="px-4 py-2 rounded-lg bg-purple-600/20 text-purple-300 text-sm font-medium hover:bg-purple-600 hover:text-white transition-colors border border-purple-500/30 cursor-pointer flex items-center gap-1.5"><i data-lucide="shopping-bag" class="w-4 h-4"></i>خرید پکیج</button></div></div></div>                <div class="group bg-white/5 border border-white/10 rounded-2xl overflow-hidden hover:-translate-y-1 transition-all duration-300 hover:shadow-2xl hover:shadow-purple-500/10 card-glow" data-aos="fade-up"><div class="relative aspect-video overflow-hidden"><img src="http://static.photos/abstract/640x360/200" alt="آلبوم کلاسیک برتر" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy"><div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 to-transparent"></div><div class="absolute bottom-3 right-3 left-3"><h3 class="text-lg font-bold text-white">آلبوم کلاسیک برتر</h3><p class="text-xs text-slate-300 mt-0.5">6 قطعه</p></div></div><div class="p-4"><ul class="space-y-1 mb-4"><li class="text-xs text-slate-400 flex items-center gap-1.5"><i data-lucide="music" class="w-3 h-3 text-purple-400 flex-shrink-0"></i>کوروش یغمایی — راک بیکلام ۷</li><li class="text-xs text-slate-400 flex items-center gap-1.5"><i data-lucide="music" class="w-3 h-3 text-purple-400 flex-shrink-0"></i>بنیامین بهادری — پاپ اینسترومنتال ۸</li><li class="text-xs text-slate-400 flex items-center gap-1.5"><i data-lucide="music" class="w-3 h-3 text-purple-400 flex-shrink-0"></i>سالار عقیلی — ترانه ماندگار ۹</li><li class="text-xs text-slate-400 flex items-center gap-1.5"><i data-lucide="music" class="w-3 h-3 text-purple-400 flex-shrink-0"></i>فرامرز پایور — موسیقی فیلم ۱۰</li><li class="text-xs text-slate-400 flex items-center gap-1.5"><i data-lucide="music" class="w-3 h-3 text-purple-400 flex-shrink-0"></i>حسین علیزاده — قطعه سنتی ۱۱</li><li class="text-xs text-slate-400 flex items-center gap-1.5"><i data-lucide="music" class="w-3 h-3 text-purple-400 flex-shrink-0"></i>فرهنگ مهر — بیکلام جاز ۱۲</li></ul><div class="flex items-center justify-between pt-3 border-t border-white/10"><span class="text-purple-300 font-bold">350,000 تومان</span><button onclick="addToCartPackage(2)" class="px-4 py-2 rounded-lg bg-purple-600/20 text-purple-300 text-sm font-medium hover:bg-purple-600 hover:text-white transition-colors border border-purple-500/30 cursor-pointer flex items-center gap-1.5"><i data-lucide="shopping-bag" class="w-4 h-4"></i>خرید پکیج</button></div></div></div>              </div>
+    </div>
+  </section>
+
+  <!-- ===== Subscription Plans ===== -->
+  <section id="subscriptions" class="py-24 border-t border-white/5">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-16" data-aos="fade-up">
+        <div class="p-2 rounded-lg bg-amber-500/10 text-amber-400 inline-flex mb-4"><i data-lucide="crown" class="w-6 h-6"></i></div>
+        <h2 class="text-3xl md:text-4xl font-bold mb-4">خرید اشتراک</h2>
+        <p class="text-slate-400">با خرید اشتراک، آهنگ‌ها را با تخفیف ویژه دانلود کنید</p>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+                <div class="relative bg-white/5 border border-white/10 rounded-2xl p-6 hover:-translate-y-1 transition-all duration-300 hover:shadow-2xl hover:shadow-purple-500/10 text-center" data-aos="fade-up"><div class="w-14 h-14 mx-auto mb-4 rounded-full bg-gradient-to-br from-purple-600 to-indigo-600 flex items-center justify-center shadow-lg"><i data-lucide="zap" class="w-7 h-7 text-white"></i></div><h3 class="text-xl font-bold mb-2">اشتراک یک ماهه</h3><p class="text-sm text-slate-400 mb-4">محدودیت دانلود ۱۰ آهنگ در ماه. مناسب برای استفاده سبک.</p><div class="space-y-2 mb-6 text-right"><div class="flex items-center gap-2 text-sm text-slate-300"><i data-lucide="calendar" class="w-4 h-4 text-purple-400"></i> مدت: 30 روز</div><div class="flex items-center gap-2 text-sm text-slate-300"><i data-lucide="download" class="w-4 h-4 text-purple-400"></i> تا 10 دانلود</div></div><div class="text-3xl font-bold text-purple-300 mb-5">99,000 تومان</div><button onclick="addToCartSubscription(1)" class="w-full py-3 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-semibold hover:shadow-lg hover:shadow-purple-500/25 transition-all flex items-center justify-center gap-2"><i data-lucide="shopping-cart" class="w-4 h-4"></i>خرید اشتراک</button></div>                <div class="relative bg-white/5 border border-white/10 rounded-2xl p-6 hover:-translate-y-1 transition-all duration-300 hover:shadow-2xl hover:shadow-purple-500/10 text-center" data-aos="fade-up"><div class="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-gradient-to-r from-cyan-600 to-teal-600 text-xs font-bold text-white shadow-lg">محبوب‌ترین</div><div class="w-14 h-14 mx-auto mb-4 rounded-full bg-gradient-to-br from-cyan-600 to-teal-600 flex items-center justify-center shadow-lg"><i data-lucide="star" class="w-7 h-7 text-white"></i></div><h3 class="text-xl font-bold mb-2">اشتراک سه ماهه</h3><p class="text-sm text-slate-400 mb-4">محدودیت دانلود ۳۰ آهنگ در سه ماه. ارزش عالی.</p><div class="space-y-2 mb-6 text-right"><div class="flex items-center gap-2 text-sm text-slate-300"><i data-lucide="calendar" class="w-4 h-4 text-purple-400"></i> مدت: 90 روز</div><div class="flex items-center gap-2 text-sm text-slate-300"><i data-lucide="download" class="w-4 h-4 text-purple-400"></i> تا 30 دانلود</div></div><div class="text-3xl font-bold text-purple-300 mb-5">199,000 تومان</div><button onclick="addToCartSubscription(2)" class="w-full py-3 rounded-xl bg-gradient-to-r from-cyan-600 to-teal-600 text-white font-semibold hover:shadow-lg hover:shadow-purple-500/25 transition-all flex items-center justify-center gap-2"><i data-lucide="shopping-cart" class="w-4 h-4"></i>خرید اشتراک</button></div>                <div class="relative bg-white/5 border border-white/10 rounded-2xl p-6 hover:-translate-y-1 transition-all duration-300 hover:shadow-2xl hover:shadow-purple-500/10 text-center" data-aos="fade-up"><div class="w-14 h-14 mx-auto mb-4 rounded-full bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center shadow-lg"><i data-lucide="crown" class="w-7 h-7 text-white"></i></div><h3 class="text-xl font-bold mb-2">اشتراک یک ساله</h3><p class="text-sm text-slate-400 mb-4">محدودیت دانلود ۱۰۰ آهنگ در سال. بهترین انتخاب.</p><div class="space-y-2 mb-6 text-right"><div class="flex items-center gap-2 text-sm text-slate-300"><i data-lucide="calendar" class="w-4 h-4 text-purple-400"></i> مدت: 365 روز</div><div class="flex items-center gap-2 text-sm text-slate-300"><i data-lucide="download" class="w-4 h-4 text-purple-400"></i> تا 100 دانلود</div></div><div class="text-3xl font-bold text-purple-300 mb-5">499,000 تومان</div><button onclick="addToCartSubscription(3)" class="w-full py-3 rounded-xl bg-gradient-to-r from-amber-500 to-orange-600 text-white font-semibold hover:shadow-lg hover:shadow-purple-500/25 transition-all flex items-center justify-center gap-2"><i data-lucide="shopping-cart" class="w-4 h-4"></i>خرید اشتراک</button></div>              </div>
+    </div>
+  </section>
+
+  <!-- ===== Artists ===== -->
+  <section id="artists" class="py-24 border-t border-white/5">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-16" data-aos="fade-up">
+        <h2 class="text-3xl md:text-4xl font-bold mb-4">هنرمندان اصلی</h2>
+        <p class="text-slate-400">آثار این خوانندگان بازسازی و بیکلام شده‌اند</p>
+      </div>
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
+        <div class="flex flex-col items-center text-center group" data-aos="fade-up"><div class="relative w-24 h-24 md:w-28 md:h-28 mb-4 rounded-full p-1 bg-gradient-to-tr from-purple-600 to-indigo-600"><div class="w-full h-full rounded-full overflow-hidden border-2 border-slate-950"><img src="http://static.photos/people/320x240/41" alt="محمدرضا شجریان" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" loading="lazy"></div><div class="absolute -bottom-1 -right-1 bg-slate-900 text-xs text-slate-300 px-2 py-0.5 rounded-full border border-white/10">12 اثر</div></div><h3 class="font-bold text-sm md:text-base mb-0.5">محمدرضا شجریان</h3><p class="text-xs text-slate-500">بازسازی شده</p></div><div class="flex flex-col items-center text-center group" data-aos="fade-up"><div class="relative w-24 h-24 md:w-28 md:h-28 mb-4 rounded-full p-1 bg-gradient-to-tr from-purple-600 to-indigo-600"><div class="w-full h-full rounded-full overflow-hidden border-2 border-slate-950"><img src="http://static.photos/people/320x240/42" alt="همایون شجریان" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" loading="lazy"></div><div class="absolute -bottom-1 -right-1 bg-slate-900 text-xs text-slate-300 px-2 py-0.5 rounded-full border border-white/10">8 اثر</div></div><h3 class="font-bold text-sm md:text-base mb-0.5">همایون شجریان</h3><p class="text-xs text-slate-500">بازسازی شده</p></div><div class="flex flex-col items-center text-center group" data-aos="fade-up"><div class="relative w-24 h-24 md:w-28 md:h-28 mb-4 rounded-full p-1 bg-gradient-to-tr from-purple-600 to-indigo-600"><div class="w-full h-full rounded-full overflow-hidden border-2 border-slate-950"><img src="http://static.photos/people/320x240/43" alt="ابی" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" loading="lazy"></div><div class="absolute -bottom-1 -right-1 bg-slate-900 text-xs text-slate-300 px-2 py-0.5 rounded-full border border-white/10">15 اثر</div></div><h3 class="font-bold text-sm md:text-base mb-0.5">ابی</h3><p class="text-xs text-slate-500">بازسازی شده</p></div><div class="flex flex-col items-center text-center group" data-aos="fade-up"><div class="relative w-24 h-24 md:w-28 md:h-28 mb-4 rounded-full p-1 bg-gradient-to-tr from-purple-600 to-indigo-600"><div class="w-full h-full rounded-full overflow-hidden border-2 border-slate-950"><img src="http://static.photos/people/320x240/44" alt="داریوش" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" loading="lazy"></div><div class="absolute -bottom-1 -right-1 bg-slate-900 text-xs text-slate-300 px-2 py-0.5 rounded-full border border-white/10">10 اثر</div></div><h3 class="font-bold text-sm md:text-base mb-0.5">داریوش</h3><p class="text-xs text-slate-500">بازسازی شده</p></div><div class="flex flex-col items-center text-center group" data-aos="fade-up"><div class="relative w-24 h-24 md:w-28 md:h-28 mb-4 rounded-full p-1 bg-gradient-to-tr from-purple-600 to-indigo-600"><div class="w-full h-full rounded-full overflow-hidden border-2 border-slate-950"><img src="http://static.photos/people/320x240/45" alt="گوگوش" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" loading="lazy"></div><div class="absolute -bottom-1 -right-1 bg-slate-900 text-xs text-slate-300 px-2 py-0.5 rounded-full border border-white/10">9 اثر</div></div><h3 class="font-bold text-sm md:text-base mb-0.5">گوگوش</h3><p class="text-xs text-slate-500">بازسازی شده</p></div><div class="flex flex-col items-center text-center group" data-aos="fade-up"><div class="relative w-24 h-24 md:w-28 md:h-28 mb-4 rounded-full p-1 bg-gradient-to-tr from-purple-600 to-indigo-600"><div class="w-full h-full rounded-full overflow-hidden border-2 border-slate-950"><img src="http://static.photos/people/320x240/46" alt="فرهاد مهراد" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" loading="lazy"></div><div class="absolute -bottom-1 -right-1 bg-slate-900 text-xs text-slate-300 px-2 py-0.5 rounded-full border border-white/10">7 اثر</div></div><h3 class="font-bold text-sm md:text-base mb-0.5">فرهاد مهراد</h3><p class="text-xs text-slate-500">بازسازی شده</p></div>      </div>
+    </div>
+  </section>
+
+  <!-- ===== Blog ===== -->
+  <section id="blog" class="py-24 border-t border-white/5 bg-gradient-to-b from-slate-950 to-slate-900/50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-16" data-aos="fade-up">
+        <h2 class="text-3xl md:text-4xl font-bold mb-4">وبلاگ تخصصی</h2>
+        <p class="text-slate-400">مقالات، آموزش‌ها و مطالب خواندنی درباره موسیقی بیکلام</p>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="group bg-white/5 border border-white/10 rounded-2xl overflow-hidden hover:-translate-y-1 transition-all duration-300 hover:shadow-2xl hover:shadow-purple-500/10 card-glow" data-aos="fade-up"><div class="relative aspect-video overflow-hidden"><img src="https://picsum.photos/seed/blog3/640/360" alt="تاثیر موسیقی بر کاهش استرس" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy"><div class="absolute top-3 right-3 px-2.5 py-1 rounded-md text-xs font-medium bg-purple-600/80 text-white backdrop-blur-sm">سلامت</div></div><div class="p-5"><p class="text-xs text-slate-500 mb-2">۵ اردیبهشت ۱۴۰۴</p><h3 class="text-lg font-bold mb-2 leading-snug">تاثیر موسیقی بر کاهش استرس</h3><p class="text-sm text-slate-400 leading-relaxed mb-4">تحقیقات علمی نشان می‌دهد موسیقی بیکلام می‌تواند استرس را تا ۶۵٪ کاهش دهد.</p><a href="#" class="inline-flex items-center gap-1 text-purple-400 text-sm font-medium hover:text-purple-300 transition-colors">ادامه مطلب<i data-lucide="arrow-left" class="w-4 h-4"></i></a></div></div><div class="group bg-white/5 border border-white/10 rounded-2xl overflow-hidden hover:-translate-y-1 transition-all duration-300 hover:shadow-2xl hover:shadow-purple-500/10 card-glow" data-aos="fade-up"><div class="relative aspect-video overflow-hidden"><img src="https://picsum.photos/seed/blog2/640/360" alt="بهترین آهنگ‌ها برای تمرکز" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy"><div class="absolute top-3 right-3 px-2.5 py-1 rounded-md text-xs font-medium bg-purple-600/80 text-white backdrop-blur-sm">پیشنهاد هفته</div></div><div class="p-5"><p class="text-xs text-slate-500 mb-2">۱۰ اردیبهشت ۱۴۰۴</p><h3 class="text-lg font-bold mb-2 leading-snug">بهترین آهنگ‌ها برای تمرکز</h3><p class="text-sm text-slate-400 leading-relaxed mb-4">لیستی از بهترین آهنگ‌های بیکلام که به شما در تمرکز و مطالعه کمک می‌کنند.</p><a href="#" class="inline-flex items-center gap-1 text-purple-400 text-sm font-medium hover:text-purple-300 transition-colors">ادامه مطلب<i data-lucide="arrow-left" class="w-4 h-4"></i></a></div></div><div class="group bg-white/5 border border-white/10 rounded-2xl overflow-hidden hover:-translate-y-1 transition-all duration-300 hover:shadow-2xl hover:shadow-purple-500/10 card-glow" data-aos="fade-up"><div class="relative aspect-video overflow-hidden"><img src="https://picsum.photos/seed/blog1/640/360" alt="آشنایی با موسیقی بیکلام" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy"><div class="absolute top-3 right-3 px-2.5 py-1 rounded-md text-xs font-medium bg-purple-600/80 text-white backdrop-blur-sm">آموزشی</div></div><div class="p-5"><p class="text-xs text-slate-500 mb-2">۱۵ اردیبهشت ۱۴۰۴</p><h3 class="text-lg font-bold mb-2 leading-snug">آشنایی با موسیقی بیکلام</h3><p class="text-sm text-slate-400 leading-relaxed mb-4">موسیقی بیکلام چیست و چه تاثیری بر روحیه ما دارد؟ در این مقاله به بررسی کامل این سبک می‌پردازیم.</p><a href="#" class="inline-flex items-center gap-1 text-purple-400 text-sm font-medium hover:text-purple-300 transition-colors">ادامه مطلب<i data-lucide="arrow-left" class="w-4 h-4"></i></a></div></div>      </div>
+      <div class="text-center mt-12" data-aos="fade-up">
+        <a href="#" class="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-white/5 border border-white/10 text-slate-200 font-medium hover:bg-white/10 transition-all hover:-translate-y-0.5">
+          مشاهده همه مقالات<i data-lucide="arrow-left" class="w-4 h-4"></i>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Footer ===== -->
+  <footer class="border-t border-white/10 bg-slate-950 py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
+        <div>
+          <div class="flex items-center gap-2 mb-4">
+            <i data-lucide="music" class="w-6 h-6 text-purple-500"></i>
+            <span class="text-xl font-bold bg-gradient-to-r from-purple-400 to-indigo-400 bg-clip-text text-transparent">نواهای بیکلام</span>
+          </div>
+          <p class="text-slate-400 text-sm leading-relaxed mb-4">نواهای بیکلام مجموعه‌ای از بهترین آهنگ‌های بیکلام است که با دقت و کیفیت بالا بازسازی و تنظیم شده‌اند.</p>
+          <div class="flex items-center gap-3">
+                        <a href="https://instagram.com/novahayebikalam" class="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-slate-400 hover:text-purple-400 hover:bg-white/10 transition-all"><i data-lucide="instagram" class="w-4 h-4"></i></a>
+                                    <a href="https://t.me/novahayebikalam" class="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-slate-400 hover:text-purple-400 hover:bg-white/10 transition-all"><i data-lucide="send" class="w-4 h-4"></i></a>
+                                    <a href="https://wa.me/" class="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-slate-400 hover:text-purple-400 hover:bg-white/10 transition-all"><i data-lucide="phone" class="w-4 h-4"></i></a>
+                      </div>
+        </div>
+        <div>
+          <h4 class="font-bold text-base mb-4">دسترسی سریع</h4>
+          <ul class="space-y-2.5 text-sm">
+            <li><a href="#latest" class="text-slate-400 hover:text-purple-400 transition-colors">جدیدترین آهنگ‌ها</a></li>
+            <li><a href="#bestsellers" class="text-slate-400 hover:text-purple-400 transition-colors">پرفروش‌ترین‌ها</a></li>
+            <li><a href="#popular" class="text-slate-400 hover:text-purple-400 transition-colors">پرطرفدارترین‌ها</a></li>
+            <li><a href="#artists" class="text-slate-400 hover:text-purple-400 transition-colors">هنرمندان</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="font-bold text-base mb-4">ارتباط با ما</h4>
+          <ul class="space-y-3 text-sm">
+                        <li class="flex items-center gap-2.5 text-slate-400"><i data-lucide="mail" class="w-4 h-4 text-purple-400 flex-shrink-0"></i><span>info@novahayebikalam.ir</span></li>
+                                    <li class="flex items-center gap-2.5 text-slate-400"><i data-lucide="phone" class="w-4 h-4 text-purple-400 flex-shrink-0"></i><span dir="ltr">۰۹۱۲۳۴۵۶۷۸۹</span></li>
+                                    <li class="flex items-center gap-2.5 text-slate-400"><i data-lucide="map-pin" class="w-4 h-4 text-purple-400 flex-shrink-0"></i><span>تهران، خیابان انقلاب، مجتمع صبا</span></li>
+                      </ul>
+        </div>
+        <div>
+          <h4 class="font-bold text-base mb-4">خبرنامه</h4>
+          <p class="text-slate-400 text-sm leading-relaxed mb-4">با عضویت در خبرنامه، از جدیدترین آهنگ‌ها مطلع شوید.</p>
+          <div class="flex gap-2">
+            <input type="email" placeholder="ایمیل شما" class="flex-1 min-w-0 px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:border-purple-500/50 transition-colors">
+            <button class="px-4 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-700 text-white text-sm font-medium transition-colors flex-shrink-0">عضویت</button>
+          </div>
+        </div>
+      </div>
+      <div class="border-t border-white/10 pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-center md:text-right">
+        <p class="text-slate-500 text-sm">© ۱۴۰۴ تمامی حقوق مادی و معنوی محفوظ است.</p>
+        <p class="text-slate-500 text-xs">طراحی و توسعه با <span class="text-purple-400">♥</span> در تهران</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ===== Cart Overlay ===== -->
+  <div id="cartOverlay" class="drawer-overlay"></div>
+
+  <!-- ===== Cart Sidebar ===== -->
+  <div id="cartSidebar" class="drawer-sidebar drawer-left">
+    <div class="flex items-center justify-between p-4 border-b border-white/10">
+      <h3 class="text-lg font-bold flex items-center gap-2">
+        <i data-lucide="shopping-cart" class="w-5 h-5 text-purple-400"></i>سبد خرید
+      </h3>
+      <button id="cartClose" class="p-2 text-slate-400 hover:text-white transition-colors rounded-lg hover:bg-white/5">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+    </div>
+    <div id="cartItems" class="flex-1 overflow-y-auto p-4 space-y-3 no-scrollbar"></div>
+    <div id="cartFooter" class="border-t border-white/10 p-4 space-y-3 hidden">
+      <div class="flex items-center justify-between text-sm">
+        <span class="text-slate-400">جمع کل</span>
+        <span id="cartTotal" class="text-lg font-bold text-purple-300">۰ تومان</span>
+      </div>
+      <button class="w-full py-3 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-semibold hover:shadow-lg hover:shadow-purple-500/25 transition-all">ثبت سفارش</button>
+    </div>
+    <div id="cartEmpty" class="flex-1 flex flex-col items-center justify-center text-center p-8">
+      <i data-lucide="shopping-bag" class="w-16 h-16 text-slate-600 mb-4"></i>
+      <p class="text-slate-400 font-medium">سبد خرید خالی است</p>
+      <p class="text-slate-500 text-sm mt-1">برای افزودن آهنگ، روی دکمه خرید کلیک کنید</p>
+    </div>
+  </div>
+
+  <!-- ===== Song Modal ===== -->
+  <div id="songModal" class="modal-overlay">
+    <div class="modal-content p-0">
+      <div class="relative aspect-video rounded-t-2xl overflow-hidden bg-slate-800">
+        <img id="modalImg" src="" alt="" class="w-full h-full object-cover">
+        <button id="modalClose" class="absolute top-3 left-3 p-2 rounded-full bg-black/50 text-white hover:bg-black/70 transition-colors backdrop-blur-sm">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+      <div class="p-6">
+        <h3 id="modalTitle" class="text-2xl font-bold mb-1"></h3>
+        <p id="modalArtist" class="text-slate-400 mb-4"></p>
+        <div class="flex items-center justify-between p-4 rounded-xl bg-white/5 border border-white/10 mb-4">
+          <span class="text-slate-400 text-sm">قیمت</span>
+          <span id="modalPrice" class="text-xl font-bold text-purple-300"></span>
+        </div>
+        <div class="flex gap-3">
+          <button id="modalPlay" class="flex-1 py-3 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-semibold hover:shadow-lg hover:shadow-purple-500/25 transition-all flex items-center justify-center gap-2">
+            <i data-lucide="headphones" class="w-5 h-5"></i>پخش پیش‌نمایش
+          </button>
+          <button id="modalAddToCart" class="flex-1 py-3 rounded-xl bg-white/5 border border-white/10 text-slate-200 font-semibold hover:bg-white/10 transition-all flex items-center justify-center gap-2">
+            <i data-lucide="shopping-cart" class="w-5 h-5"></i>افزودن به سبد خرید
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Login Modal ===== -->
+  <div id="loginModal" class="modal-overlay">
+    <div class="modal-content p-6 relative">
+      <button id="loginModalClose" class="absolute top-3 left-3 p-2 rounded-full bg-black/50 text-white hover:bg-black/70 transition-colors backdrop-blur-sm z-10">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+      <div id="loginStep1">
+        <div class="text-center mb-6">
+          <div class="w-14 h-14 mx-auto mb-4 rounded-full bg-purple-600/20 flex items-center justify-center">
+            <i data-lucide="phone" class="w-6 h-6 text-purple-400"></i>
+          </div>
+          <h3 class="text-xl font-bold mb-1">ورود | ثبت نام</h3>
+          <p class="text-sm text-slate-400">شماره موبایل خود را وارد کنید</p>
+        </div>
+        <div class="space-y-4">
+          <input type="tel" id="phoneInput" placeholder="۰۹۱۲۳۴۵۶۷۸۹" maxlength="11" class="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-center text-lg tracking-widest text-slate-200 placeholder-slate-500 focus:outline-none focus:border-purple-500/50 transition-colors" dir="ltr">
+          <button id="sendOtpBtn" class="w-full py-3 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-semibold hover:shadow-lg hover:shadow-purple-500/25 transition-all disabled:opacity-50 disabled:cursor-not-allowed">ارسال کد</button>
+        </div>
+      </div>
+      <div id="loginStep2" class="hidden">
+        <div class="text-center mb-6">
+          <div class="w-14 h-14 mx-auto mb-4 rounded-full bg-green-600/20 flex items-center justify-center">
+            <i data-lucide="message-square" class="w-6 h-6 text-green-400"></i>
+          </div>
+          <h3 class="text-xl font-bold mb-1">کد تایید</h3>
+          <p class="text-sm text-slate-400">کد ارسال شده به <span id="loginPhoneDisplay" class="text-purple-300" dir="ltr"></span> را وارد کنید</p>
+        </div>
+        <div class="space-y-4">
+          <input type="text" id="otpInput" placeholder="کد ۶ رقمی" maxlength="6" class="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-center text-lg tracking-[0.5em] text-slate-200 placeholder-slate-500 focus:outline-none focus:border-purple-500/50 transition-colors" dir="ltr">
+          <button id="loginBtn" class="w-full py-3 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-semibold hover:shadow-lg hover:shadow-purple-500/25 transition-all">ورود</button>
+          <button id="backToPhoneBtn" class="w-full py-2 text-sm text-slate-400 hover:text-purple-400 transition-colors text-center">تغییر شماره</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== User Drawer ===== -->
+  <div id="userOverlay" class="drawer-overlay"></div>
+  <div id="userDrawer" class="drawer-sidebar drawer-right">
+    <div class="flex items-center justify-between p-4 border-b border-white/10">
+      <div class="flex items-center gap-3">
+        <div id="userAvatar" class="w-10 h-10 rounded-full bg-gradient-to-br from-purple-600 to-indigo-600 flex items-center justify-center text-white font-bold text-sm">ک</div>
+        <div>
+          <p id="userName" class="font-bold text-sm">کاربر</p>
+          <p id="userPhone" class="text-xs text-slate-400" dir="ltr"></p>
+        </div>
+      </div>
+      <button id="userClose" class="p-2 text-slate-400 hover:text-white transition-colors rounded-lg hover:bg-white/5">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+    </div>
+    <div class="flex-1 overflow-y-auto p-4 space-y-1">
+      <a href="#" class="flex items-center gap-3 py-3 px-4 rounded-xl hover:bg-white/5 text-slate-200 hover:text-purple-400 transition-colors"><i data-lucide="user" class="w-5 h-5 text-slate-400"></i>پنل کاربری</a>
+      <a href="#" class="flex items-center gap-3 py-3 px-4 rounded-xl hover:bg-white/5 text-slate-200 hover:text-purple-400 transition-colors"><i data-lucide="shopping-bag" class="w-5 h-5 text-slate-400"></i>سفارش‌های من</a>
+      <a href="#" class="flex items-center gap-3 py-3 px-4 rounded-xl hover:bg-white/5 text-slate-200 hover:text-purple-400 transition-colors"><i data-lucide="settings" class="w-5 h-5 text-slate-400"></i>تنظیمات</a>
+      <hr class="border-white/10 my-3">
+      <button id="logoutBtn" class="flex items-center gap-3 w-full py-3 px-4 rounded-xl hover:bg-red-500/10 text-red-400 hover:text-red-300 transition-colors text-right"><i data-lucide="log-out" class="w-5 h-5"></i>خروج از حساب</button>
+    </div>
+  </div>
+
+  <!-- ===== Toast Container ===== -->
+  <div id="toastContainer"></div>
+
+  <!-- ===== Audio Player ===== -->
+  <div id="audioPlayer" class="fixed bottom-0 left-0 right-0 bg-slate-900/95 backdrop-blur-lg border-t border-white/10 transform translate-y-full transition-transform duration-500 z-40">
+    <div class="max-w-7xl mx-auto px-4 py-2.5">
+      <div class="flex items-center gap-3">
+        <img id="playerImg" src="" alt="cover" class="w-11 h-11 rounded-lg object-cover hidden sm:block ring-1 ring-white/10">
+        <div class="flex-1 min-w-0">
+          <div id="playerTitle" class="text-sm font-bold truncate leading-tight"></div>
+          <div id="playerArtist" class="text-xs text-slate-400 truncate leading-tight mt-0.5"></div>
+        </div>
+        <div class="flex items-center gap-1">
+          <button id="playerPrev" class="p-1.5 text-slate-400 hover:text-white transition-colors rounded-lg hover:bg-white/5 hidden sm:block"><i data-lucide="skip-back" class="w-4 h-4"></i></button>
+          <button id="playerToggle" class="p-2.5 rounded-full bg-purple-600 hover:bg-purple-700 transition-colors shadow-lg shadow-purple-500/20"><i data-lucide="pause" class="w-5 h-5 fill-current"></i></button>
+          <button id="playerNext" class="p-1.5 text-slate-400 hover:text-white transition-colors rounded-lg hover:bg-white/5 hidden sm:block"><i data-lucide="skip-forward" class="w-4 h-4"></i></button>
+        </div>
+        <div class="hidden md:flex items-center gap-2">
+          <i data-lucide="volume-2" class="w-4 h-4 text-slate-400"></i>
+          <input type="range" id="volumeSlider" class="volume-slider" min="0" max="1" step="0.05" value="1">
+        </div>
+        <button id="playerClose" class="p-1.5 text-slate-400 hover:text-white transition-colors rounded-lg hover:bg-white/5"><i data-lucide="x" class="w-5 h-5"></i></button>
+      </div>
+      <div class="flex items-center gap-3 mt-1.5">
+        <span id="currentTime" class="text-xs text-slate-500 font-mono tabular-nums w-10 text-center">0:00</span>
+        <input type="range" id="progressBar" class="progress-bar flex-1" min="0" max="100" value="0">
+        <span id="totalTime" class="text-xs text-slate-500 font-mono tabular-nums w-10 text-center">0:00</span>
+      </div>
+    </div>
+    <audio id="audioEl"></audio>
+  </div>
+
+  <script src="dist/aos.js"></script>
+  <script src="dist/lucide.js"></script>
+  
+  <script>
+    const heroSlides = [{"id":1,"sort_order":1,"badge_icon":"music","badge_text":"تجربه‌ای متفاوت از موسیقی بیکلام","title_line1":"بازسازی و تنظیم مجدد","title_line2":"آهنگ‌های ماندگار","title_line3":"به سبک بیکلام","description":"مجموعه‌ای منحصربه‌فرد از محبوب‌ترین ترانه‌ها، بازسازی شده با سازهای باکیفیت و تنظیمی تازه.","gradient_name":"from-purple-400 via-indigo-400 to-cyan-400","glow_color":"bg-purple-600\/20","bg_image":"https:\/\/picsum.photos\/seed\/guitar\/1600\/900","btn1_text":"مشاهده آهنگ‌ها","btn1_link":"#latest","btn1_gradient":"from-purple-600 to-indigo-600","btn1_icon":"headphones","btn2_text":"خرید فوری","btn2_link":"#bestsellers","btn2_icon":"shopping-bag","is_active":1,"created_at":"2026-06-01 14:10:25"},{"id":2,"sort_order":2,"badge_icon":"sparkles","badge_text":"کیفیت استودیویی، حس و حالی تازه","title_line1":"جدیدترین تنظیم‌ها","title_line2":"محبوب‌ترین ترانه‌ها","title_line3":"با کیفیت استودیویی","description":"هر هفته آهنگ‌های جدید با بهترین کیفیت ضبط و تنظیم حرفه‌ای. تجربه‌ای نزدیک به اجرای زنده.","gradient_name":"from-cyan-400 via-teal-400 to-emerald-400","glow_color":"bg-cyan-600\/20","bg_image":"https:\/\/picsum.photos\/seed\/microphone\/1600\/900","btn1_text":"آهنگ‌های جدید","btn1_link":"#latest","btn1_gradient":"from-cyan-600 to-teal-600","btn1_icon":"headphones","btn2_text":null,"btn2_link":null,"btn2_icon":null,"is_active":1,"created_at":"2026-06-01 14:10:25"},{"id":3,"sort_order":3,"badge_icon":"heart","badge_text":"موسیقی برای لحظات خاص","title_line1":"موسیقی بیکلام","title_line2":"برای لحظات خاص","title_line3":"آرامش و احساس","description":"آرامش را با نواهای بیکلام تجربه کنید. مجموعه‌ای از احساس‌آمیزترین قطعات برای کار، مطالعه و لحظات ناب.","gradient_name":"from-rose-400 via-pink-400 to-orange-400","glow_color":"bg-rose-600\/20","bg_image":"https:\/\/picsum.photos\/seed\/peace\/1600\/900","btn1_text":"پرطرفدارترین‌ها","btn1_link":"#popular","btn1_gradient":"from-rose-600 to-orange-600","btn1_icon":"trending-up","btn2_text":null,"btn2_link":null,"btn2_icon":null,"is_active":1,"created_at":"2026-06-01 14:10:25"}];
+    const settings = {"site_name":"نواهای بیکلام","site_title":"نواهای بیکلام | بازسازی آهنگ‌های معروف","site_description":"مجموعه‌ای از بهترین آهنگ‌های بیکلام بازسازی شده با کیفیت استودیویی","logo_text":"نواهای بیکلام","footer_about":"نواهای بیکلام مجموعه‌ای از بهترین آهنگ‌های بیکلام است که با دقت و کیفیت بالا بازسازی و تنظیم شده‌اند.","phone":"۰۹۱۲۳۴۵۶۷۸۹","email":"info@novahayebikalam.ir","address":"تهران، خیابان انقلاب، مجتمع صبا","instagram":"https:\/\/instagram.com\/novahayebikalam","telegram":"https:\/\/t.me\/novahayebikalam","whatsapp":"۰۹۱۲۳۴۵۶۷۸۹","telegram_bot_token":"","telegram_chat_id":"","footer_newsletter_text":"با عضویت در خبرنامه، از جدیدترین آهنگ‌ها مطلع شوید.","bale_bot_token":"","bale_chat_id":"","sms_ir_api_key":"UHnbMRgzKGuqy1OW5WBneYS6XofSWVbMK6E1pz2vXxbwgENF","sms_ir_template_id":"667926"};
+    const totalSlides = heroSlides.length;
+    const latestSongs = [[{"id":1,"title":"آهنگ معروف ۱","artist":"محمدرضا شجریان","price":150000,"cover":"http:\/\/static.photos\/abstract\/640x360\/1","preview_url":"https:\/\/www.soundhelix.com\/examples\/mp3\/SoundHelix-Song-1.mp3"},{"id":2,"title":"قطعه عاشقانه ۲","artist":"همایون شجریان","price":180000,"cover":"http:\/\/static.photos\/technology\/640x360\/2","preview_url":"https:\/\/www.soundhelix.com\/examples\/mp3\/SoundHelix-Song-2.mp3"},{"id":3,"title":"موسیقی بی‌کلام ۳","artist":"محسن نامجو","price":165000,"cover":"http:\/\/static.photos\/nature\/640x360\/3","preview_url":"https:\/\/www.soundhelix.com\/examples\/mp3\/SoundHelix-Song-3.mp3"},{"id":4,"title":"بازسازی خاطره ۴","artist":"داریوش","price":155000,"cover":"http:\/\/static.photos\/cityscape\/640x360\/4","preview_url":"https:\/\/www.soundhelix.com\/examples\/mp3\/SoundHelix-Song-4.mp3"},{"id":5,"title":"قطعه غمگین ۵","artist":"ابی","price":190000,"cover":"http:\/\/static.photos\/minimal\/640x360\/5","preview_url":"https:\/\/www.soundhelix.com\/examples\/mp3\/SoundHelix-Song-5.mp3"},{"id":6,"title":"تنظیم جدید ۶","artist":"گوگوش","price":170000,"cover":"http:\/\/static.photos\/indoor\/640x360\/6","preview_url":"https:\/\/www.soundhelix.com\/examples\/mp3\/SoundHelix-Song-6.mp3"}], [{"id":7,"title":"راک بیکلام ۷","artist":"کوروش یغمایی","price":200000,"cover":"http:\/\/static.photos\/workspace\/640x360\/7","preview_url":"https:\/\/www.soundhelix.com\/examples\/mp3\/SoundHelix-Song-7.mp3"},{"id":8,"title":"پاپ اینسترومنتال ۸","artist":"بنیامین بهادری","price":150000,"cover":"http:\/\/static.photos\/food\/640x360\/8","preview_url":"https:\/\/www.soundhelix.com\/examples\/mp3\/SoundHelix-Song-8.mp3"},{"id":9,"title":"ترانه ماندگار ۹","artist":"سالار عقیلی","price":175000,"cover":"http:\/\/static.photos\/travel\/640x360\/9","preview_url":"https:\/\/www.soundhelix.com\/examples\/mp3\/SoundHelix-Song-9.mp3"},{"id":10,"title":"موسیقی فیلم ۱۰","artist":"فرامرز پایور","price":220000,"cover":"http:\/\/static.photos\/textures\/640x360\/10","preview_url":"https:\/\/www.soundhelix.com\/examples\/mp3\/SoundHelix-Song-10.mp3"},{"id":11,"title":"قطعه سنتی ۱۱","artist":"حسین علیزاده","price":210000,"cover":"http:\/\/static.photos\/industry\/640x360\/11","preview_url":"https:\/\/www.soundhelix.com\/examples\/mp3\/SoundHelix-Song-11.mp3"},{"id":12,"title":"بیکلام جاز ۱۲","artist":"فرهنگ مهر","price":195000,"cover":"http:\/\/static.photos\/outdoor\/640x360\/12","preview_url":"https:\/\/www.soundhelix.com\/examples\/mp3\/SoundHelix-Song-12.mp3"}], [{"id":13,"title":"مینیمال ۱۳","artist":"سینا سرلک","price":145000,"cover":"http:\/\/static.photos\/studio\/640x360\/13","preview_url":"https:\/\/www.soundhelix.com\/examples\/mp3\/SoundHelix-Song-13.mp3"},{"id":14,"title":"همای ۱۴","artist":"پرواز همای","price":230000,"cover":"http:\/\/static.photos\/science\/640x360\/14","preview_url":"https:\/\/www.soundhelix.com\/examples\/mp3\/SoundHelix-Song-14.mp3"},{"id":15,"title":"پیانو سولو ۱۵","artist":"لیلا فروهر","price":160000,"cover":"http:\/\/static.photos\/legal\/640x360\/15","preview_url":"https:\/\/www.soundhelix.com\/examples\/mp3\/SoundHelix-Song-15.mp3"},{"id":16,"title":"ویولن عاشقانه ۱۶","artist":"ستار","price":185000,"cover":"http:\/\/static.photos\/estate\/640x360\/16","preview_url":"https:\/\/www.soundhelix.com\/examples\/mp3\/SoundHelix-Song-16.mp3"},{"id":17,"title":"گیتار کلاسیک ۱۷","artist":"مهستی","price":170000,"cover":"http:\/\/static.photos\/restaurant\/640x360\/17","preview_url":"https:\/\/www.soundhelix.com\/examples\/mp3\/SoundHelix-Song-17.mp3"},{"id":18,"title":"سازی از خاطرات ۱۸","artist":"شهرام ناظری","price":205000,"cover":"http:\/\/static.photos\/retail\/640x360\/18","preview_url":"https:\/\/www.soundhelix.com\/examples\/mp3\/SoundHelix-Song-18.mp3"}]];
+    const bestSellers = [{"id":101,"title":"سوغاتی","artist":"ابی","price":299000,"cover":"http:\/\/static.photos\/blurred\/640x360\/21","preview_url":"https:\/\/www.soundhelix.com\/examples\/mp3\/SoundHelix-Song-101.mp3","badge":"پرفروش"},{"id":102,"title":"موج آبی","artist":"داریوش","price":289000,"cover":"http:\/\/static.photos\/bokeh\/640x360\/22","preview_url":"https:\/\/www.soundhelix.com\/examples\/mp3\/SoundHelix-Song-102.mp3","badge":"پرفروش"},{"id":103,"title":"خواننده خیابان","artist":"سیامک عباسی","price":259000,"cover":"http:\/\/static.photos\/gradient\/640x360\/23","preview_url":"https:\/\/www.soundhelix.com\/examples\/mp3\/SoundHelix-Song-103.mp3","badge":"پرفروش"},{"id":104,"title":"نصف شب","artist":"گوگوش","price":275000,"cover":"http:\/\/static.photos\/monochrome\/640x360\/24","preview_url":"https:\/\/www.soundhelix.com\/examples\/mp3\/SoundHelix-Song-104.mp3","badge":"پرفروش"}];
+    const popular = [{"id":201,"title":"باران","artist":"فرهاد مهراد","price":199000,"cover":"http:\/\/static.photos\/vintage\/640x360\/31","preview_url":"https:\/\/www.soundhelix.com\/examples\/mp3\/SoundHelix-Song-201.mp3","badge":"پرطرفدار"},{"id":202,"title":"لالایی","artist":"محمدرضا شجریان","price":220000,"cover":"http:\/\/static.photos\/white\/640x360\/32","preview_url":"https:\/\/www.soundhelix.com\/examples\/mp3\/SoundHelix-Song-202.mp3","badge":"پرطرفدار"},{"id":203,"title":"یار دبستانی","artist":"حسن شماعی‌زاده","price":189000,"cover":"http:\/\/static.photos\/black\/640x360\/33","preview_url":"https:\/\/www.soundhelix.com\/examples\/mp3\/SoundHelix-Song-203.mp3","badge":"پرطرفدار"},{"id":204,"title":"صدای پای آب","artist":"همایون شجریان","price":245000,"cover":"http:\/\/static.photos\/blue\/640x360\/34","preview_url":"https:\/\/www.soundhelix.com\/examples\/mp3\/SoundHelix-Song-204.mp3","badge":"پرطرفدار"}];
+    const artists = [{"id":1,"name":"محمدرضا شجریان","song_count":12,"image":"http:\/\/static.photos\/people\/320x240\/41"},{"id":2,"name":"همایون شجریان","song_count":8,"image":"http:\/\/static.photos\/people\/320x240\/42"},{"id":3,"name":"ابی","song_count":15,"image":"http:\/\/static.photos\/people\/320x240\/43"},{"id":4,"name":"داریوش","song_count":10,"image":"http:\/\/static.photos\/people\/320x240\/44"},{"id":5,"name":"گوگوش","song_count":9,"image":"http:\/\/static.photos\/people\/320x240\/45"},{"id":6,"name":"فرهاد مهراد","song_count":7,"image":"http:\/\/static.photos\/people\/320x240\/46"}];
+    const blogPosts = [{"id":3,"title":"تاثیر موسیقی بر کاهش استرس","excerpt":"تحقیقات علمی نشان می‌دهد موسیقی بیکلام می‌تواند استرس را تا ۶۵٪ کاهش دهد.","image":"https:\/\/picsum.photos\/seed\/blog3\/640\/360","date_str":"۵ اردیبهشت ۱۴۰۴","category":"سلامت"},{"id":2,"title":"بهترین آهنگ‌ها برای تمرکز","excerpt":"لیستی از بهترین آهنگ‌های بیکلام که به شما در تمرکز و مطالعه کمک می‌کنند.","image":"https:\/\/picsum.photos\/seed\/blog2\/640\/360","date_str":"۱۰ اردیبهشت ۱۴۰۴","category":"پیشنهاد هفته"},{"id":1,"title":"آشنایی با موسیقی بیکلام","excerpt":"موسیقی بیکلام چیست و چه تاثیری بر روحیه ما دارد؟ در این مقاله به بررسی کامل این سبک می‌پردازیم.","image":"https:\/\/picsum.photos\/seed\/blog1\/640\/360","date_str":"۱۵ اردیبهشت ۱۴۰۴","category":"آموزشی"}];
+    const testimonialsData = [{"id":1,"name":"سارا محمدی","text":"کیفیت تنظیم‌ها فوق‌العاده است. از خریدم کاملاً راضی هستم.","rating":5},{"id":2,"name":"امیر حسینی","text":"دقیقاً همون چیزی که دنبالش می‌گشتم. موسیقی بیکلام با کیفیت عالی.","rating":5},{"id":3,"name":"زهرا کریمی","text":"کیفیت فایل‌ها بی‌نظیر بود. حتماً دوباره خرید می‌کنم.","rating":4},{"id":4,"name":"محمد رضایی","text":"تنظیم‌های جدید و خلاقانه. حسابی لذت بردم.","rating":5},{"id":5,"name":"نیلوفر احمدی","text":"بهترین سایت موسیقی بیکلام که دیدم. تنوع و کیفیت عالی.","rating":5},{"id":6,"name":"رضا طاهری","text":"پشتیبانی عالی و پاسخگویی سریع. موسیقی‌ها فوق‌العاده بودن.","rating":4}];
+    const allSongs = [...latestSongs.flat(), ...bestSellers, ...popular];
+    const packagesData = [{"id":1,"title":"آلبوم منتخب شماره ۱","description":"مجموعه‌ای از ۶ قطعه بی‌نظیر از هنرمندان محبوب و ماندگار","cover":"http:\/\/static.photos\/abstract\/640x360\/100","price":450000},{"id":2,"title":"آلبوم کلاسیک برتر","description":"۶ قطعه کلاسیک و بی‌زمان از اساتید موسیقی ایران","cover":"http:\/\/static.photos\/abstract\/640x360\/200","price":350000}];
+    const plansData = [{"id":1,"title":"اشتراک یک ماهه","description":"محدودیت دانلود ۱۰ آهنگ در ماه. مناسب برای استفاده سبک.","duration_days":30,"download_limit":10,"price":99000},{"id":2,"title":"اشتراک سه ماهه","description":"محدودیت دانلود ۳۰ آهنگ در سه ماه. ارزش عالی.","duration_days":90,"download_limit":30,"price":199000},{"id":3,"title":"اشتراک یک ساله","description":"محدودیت دانلود ۱۰۰ آهنگ در سال. بهترین انتخاب.","duration_days":365,"download_limit":100,"price":499000}];
+  </script>
+  <script src="assets/js/script-static.js"></script>
+</body>
+</html>
+

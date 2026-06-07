@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% load static music_extras %}
+
+{% block title %}{% if success %}پرداخت موفق{% else %}پرداخت ناموفق{% endif %} | نواهای بیکلام{% endblock %}
+
+{% block content %}
+
+<section class="relative min-h-screen flex items-center pt-24 overflow-hidden">
+  <div class="absolute inset-0 bg-gradient-to-b from-slate-950 via-indigo-950/30 to-slate-950 z-0"></div>
+  <div class="absolute top-1/3 left-1/2 -translate-x-1/2 w-[600px] h-[600px] rounded-full blur-[120px] {% if success %}bg-emerald-600/10{% else %}bg-red-600/10{% endif %} z-0"></div>
+  <div class="relative z-10 max-w-lg mx-auto px-4 w-full text-center">
+    <div class="bg-white/5 border border-white/10 rounded-2xl p-8" data-aos="zoom-in">
+      <div class="w-20 h-20 mx-auto mb-6 rounded-full {% if success %}bg-emerald-500/20{% else %}bg-red-500/20{% endif %} flex items-center justify-center">
+        <i data-lucide="{% if success %}check-circle{% else %}x-circle{% endif %}" class="w-10 h-10 {% if success %}text-emerald-400{% else %}text-red-400{% endif %}"></i>
+      </div>
+      <h1 class="text-2xl font-bold mb-2">{% if success %}پرداخت با موفقیت انجام شد{% else %}پرداخت ناموفق{% endif %}</h1>
+      <p class="text-slate-400 mb-6">
+        {% if success %}
+          سفارش شما با موفقیت ثبت و پرداخت شد.
+        {% else %}
+          {{ message }}
+        {% endif %}
+      </p>
+
+      {% if order %}
+      <div class="bg-white/5 rounded-xl p-4 mb-6 text-right space-y-2">
+        <div class="flex justify-between text-sm">
+          <span class="text-slate-400">شماره سفارش</span>
+          <span class="font-medium">{{ order.id }}</span>
+        </div>
+        <div class="flex justify-between text-sm">
+          <span class="text-slate-400">مبلغ</span>
+          <span class="font-medium text-purple-300">{{ order.total|price_format }}</span>
+        </div>
+        {% if ref_id %}
+        <div class="flex justify-between text-sm">
+          <span class="text-slate-400">کد پیگیری</span>
+          <span class="font-medium" dir="ltr">{{ ref_id }}</span>
+        </div>
+        {% endif %}
+      </div>
+
+      {% if success and order.items %}
+      <div class="bg-white/5 rounded-xl p-4 mb-6 text-right">
+        <h4 class="text-sm font-bold mb-3">آیتم‌های خریداری شده</h4>
+        <div class="space-y-2">
+          {% for item in order.items %}
+          <div class="flex items-center justify-between py-2 border-b border-white/5 last:border-0">
+            <div class="text-sm">{{ item.title }}{% if item.artist %} - {{ item.artist }}{% endif %}</div>
+            <a href="{% if item.item_type == 'song' %}{% url 'song_detail' item.item_id %}{% elif item.item_type == 'subscription' %}{% url 'profile' %}#subscription{% else %}{% url 'profile' %}#albums{% endif %}" class="text-xs px-3 py-1 rounded-lg bg-purple-600/20 text-purple-300 hover:bg-purple-600/30 transition-colors">مشاهده و دانلود</a>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      {% endif %}
+
+      {% if success %}
+      <a href="{% url 'profile' %}#orders" class="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-semibold hover:shadow-lg hover:shadow-purple-500/25 transition-all">
+        <i data-lucide="shopping-bag" class="w-5 h-5"></i>مشاهده سفارش‌ها
+      </a>
+      {% else %}
+      <div class="flex flex-col sm:flex-row gap-3 justify-center">
+        <a href="{% url 'profile' %}#orders" class="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-purple-600/20 text-purple-300 hover:bg-purple-600/30 border border-purple-500/20 transition-all">
+          <i data-lucide="refresh-cw" class="w-5 h-5"></i>بررسی مجدد پرداخت
+        </a>
+        <a href="{% url 'home' %}" class="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-semibold hover:shadow-lg hover:shadow-purple-500/25 transition-all">
+          <i data-lucide="home" class="w-5 h-5"></i>بازگشت به صفحه اصلی
+        </a>
+      </div>
+      {% endif %}
+      {% else %}
+      <a href="{% url 'home' %}" class="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-semibold hover:shadow-lg hover:shadow-purple-500/25 transition-all">
+        <i data-lucide="home" class="w-5 h-5"></i>بازگشت به صفحه اصلی
+      </a>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+{% endblock %}

@@ -1,0 +1,14 @@
+Django>=5.2,<6.0
+Pillow
+python-dotenv
+requests
+jdatetime
+mysqlclient
+django-ckeditor
+beautifulsoup4
+lxml
+boto3
+django-storages
+audio-separator
+onnxruntime
+pydub

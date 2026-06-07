@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% load music_extras %}
+
+{% block title %}درباره ما | {{ site_config.logo_text|default:"نواهای بیکلام" }}{% endblock %}
+
+{% block content %}
+<section class="relative pt-32 pb-24 overflow-hidden">
+  <div class="absolute inset-0 bg-gradient-to-b from-slate-950 via-purple-950/30 to-slate-950 z-0"></div>
+  <div class="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-16" data-aos="fade-up">
+      <h1 class="text-4xl md:text-5xl font-extrabold mb-4">درباره ما</h1>
+      <p class="text-slate-400 max-w-xl mx-auto">{{ site_config.footer_about|default:"مجموعه‌ای از بهترین آهنگ‌های بیکلام" }}</p>
+    </div>
+    <div class="prose prose-invert max-w-none space-y-6 text-slate-300 leading-relaxed" data-aos="fade-up">
+      <p class="text-lg">
+        {{ site_config.site_description|default:"نواهای بیکلام یک پلتفرم تخصصی در زمینه بازسازی و تنظیم مجدد آهنگ‌های معروف به سبک بیکلام است. ما با استفاده از سازهای باکیفیت و تنظیم‌های حرفه‌ای، تجربه‌ای تازه از آهنگ‌های محبوب را برای شما فراهم می‌کنیم." }}
+      </p>
+      <p>
+        هدف ما ارائه موسیقی بیکلام با کیفیت استودیویی برای علاقه‌مندان به موسیقی، تولیدکنندگان محتوا، و همه کسانی است که به دنبال آرامش و تمرکز در کار و زندگی خود هستند.
+      </p>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 my-12">
+        <div class="bg-white/5 border border-white/10 rounded-2xl p-6 text-center">
+          <div class="w-14 h-14 mx-auto mb-4 rounded-full bg-purple-600/20 flex items-center justify-center">
+            <i data-lucide="music" class="w-7 h-7 text-purple-400"></i>
+          </div>
+          <h3 class="font-bold text-lg mb-2">تنظیم حرفه‌ای</h3>
+          <p class="text-sm text-slate-400">بازسازی آهنگ‌ها با بالاترین کیفیت استودیویی</p>
+        </div>
+        <div class="bg-white/5 border border-white/10 rounded-2xl p-6 text-center">
+          <div class="w-14 h-14 mx-auto mb-4 rounded-full bg-amber-600/20 flex items-center justify-center">
+            <i data-lucide="headphones" class="w-7 h-7 text-amber-400"></i>
+          </div>
+          <h3 class="font-bold text-lg mb-2">دانلود نامحدود</h3>
+          <p class="text-sm text-slate-400">دسترسی به هزاران آهنگ بیکلام با یک اشتراک</p>
+        </div>
+        <div class="bg-white/5 border border-white/10 rounded-2xl p-6 text-center">
+          <div class="w-14 h-14 mx-auto mb-4 rounded-full bg-emerald-600/20 flex items-center justify-center">
+            <i data-lucide="shield-check" class="w-7 h-7 text-emerald-400"></i>
+          </div>
+          <h3 class="font-bold text-lg mb-2">پرداخت امن</h3>
+          <p class="text-sm text-slate-400">تراکنش‌های امن با درگاه زرین‌پال</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

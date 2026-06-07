@@ -1,0 +1,148 @@
+{% extends "base.html" %}
+{% load static music_extras %}
+
+{% block title %}{{ post.title }} | وبلاگ نواهای بیکلام{% endblock %}
+{% block meta_description %}{{ post.excerpt|default:post.title }} | وبلاگ تخصصی موسیقی بیکلام{% endblock %}
+{% block meta_keywords %}{{ post.title }}, مقاله موسیقی, وبلاگ, آهنگ بیکلام{% endblock %}
+{% block og_title %}{{ post.title }} | وبلاگ نواهای بیکلام{% endblock %}
+{% block og_description %}{{ post.excerpt|default:post.title }}{% endblock %}
+{% block og_image %}{{ post.image }}{% endblock %}
+{% block twitter_image %}{{ post.image }}{% endblock %}
+{% block og_type %}article{% endblock %}
+
+{% block schema %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "{{ post.title|escapejs }}",
+  "description": "{{ post.excerpt|default:post.title|striptags|escapejs }}",
+  "image": "{{ post.image }}",
+  "url": "{{ request.build_absolute_uri }}",
+  "datePublished": "{{ post.date_published|date:'c' }}",
+  "dateModified": "{{ post.date_published|date:'c' }}",
+  "author": {
+    "@type": "Organization",
+    "name": "{{ site_config.logo_text|default:'نواهای بیکلام' }}"
+  },
+  "inLanguage": "fa-IR",
+  "timeRequired": "PT{{ post.reading_time }}M"
+}
+</script>
+{% with schema_comments=comments|slice:":15" %}
+{% if schema_comments %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  "itemListElement": [
+    {% for comment in schema_comments %}
+    {
+      "@type": "Comment",
+      "@id": "#comment-{{ comment.id }}",
+      "author": {
+        "@type": "Person",
+        "name": "{{ comment.name|escapejs }}"
+      },
+      "dateCreated": "{{ comment.created_at|date:'c' }}",
+      "text": "{{ comment.text|truncatewords:50|escapejs }}"
+      {% if comment.rating %}
+      ,"reviewRating": {
+        "@type": "Rating",
+        "ratingValue": "{{ comment.rating }}",
+        "bestRating": "5"
+      }
+      {% endif %}
+    }{% if comment.replies.all %},
+    {% for reply in comment.replies.all %}
+    {
+      "@type": "Comment",
+      "author": {
+        "@type": "Person",
+        "name": "{{ reply.name|escapejs }}"
+      },
+      "dateCreated": "{{ reply.created_at|date:'c' }}",
+      "text": "{{ reply.text|truncatewords:50|escapejs }}",
+      "parentItem": {
+        "@id": "#comment-{{ comment.id }}"
+      }
+    }{% if not forloop.parentloop.last or not forloop.last %},{% endif %}
+    {% endfor %}
+    {% elif not forloop.last %},
+    {% endif %}
+    {% endfor %}
+  ]
+}
+</script>
+{% endif %}
+{% endwith %}
+{% endblock %}
+
+{% block content %}
+
+<article>
+  <section class="relative min-h-[40vh] flex items-center pt-24 overflow-hidden">
+    <div class="absolute inset-0 bg-gradient-to-b from-slate-950 via-indigo-950/30 to-slate-950 z-0"></div>
+    <div class="absolute inset-0 z-[1]">
+      <img src="{{ post.image }}" alt="{{ post.title }}" class="w-full h-full object-cover opacity-15">
+    </div>
+    <div class="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <!-- Breadcrumb -->
+      <nav class="flex items-center justify-center gap-1.5 text-xs text-slate-500 mb-4" aria-label="مسیر راهنما">
+        <a href="/" class="hover:text-purple-400 transition-colors flex items-center gap-1"><i data-lucide="home" class="w-3 h-3"></i></a>
+        <i data-lucide="chevron-left" class="w-3 h-3 text-slate-600"></i>
+        <a href="{% url 'blog_list' %}" class="hover:text-purple-400 transition-colors">وبلاگ</a>
+        <i data-lucide="chevron-left" class="w-3 h-3 text-slate-600"></i>
+        <span class="text-slate-300">{{ post.title }}</span>
+      </nav>
+      <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {"@type": "ListItem", "position": 1, "name": "خانه", "item": "{{ request.scheme }}://{{ request.get_host }}/"},
+          {"@type": "ListItem", "position": 2, "name": "وبلاگ", "item": "{{ request.scheme }}://{{ request.get_host }}{% url 'blog_list' %}"},
+          {"@type": "ListItem", "position": 3, "name": "{{ post.title }}", "item": "{{ request.build_absolute_uri }}"}
+        ]
+      }
+      </script>
+      <div data-aos="fade-up">
+        {% if post.category %}
+        <span class="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-purple-600/20 text-purple-300 text-xs font-medium mb-4">{{ post.category.name }}</span>
+        {% endif %}
+        <h1 class="text-3xl md:text-5xl font-extrabold leading-tight mb-4">{{ post.title }}</h1>
+        <div class="flex items-center justify-center gap-4 text-sm text-slate-500">
+          <span><i data-lucide="calendar" class="w-4 h-4 inline"></i> {{ post.date_published|to_jalali }}</span>
+          <span>•</span>
+          <span><i data-lucide="clock" class="w-4 h-4 inline"></i> زمان مطالعه: {{ post.reading_time }} دقیقه</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-16">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="ck-content" data-aos="fade-up">
+        {% if post.content %}
+        {{ post.content|safe }}
+        {% else %}
+        <div class="text-slate-400 leading-relaxed">
+          <p>{{ post.excerpt }}</p>
+          <p class="mt-4">محتوای کامل این مقاله به زودی منتشر خواهد شد.</p>
+        </div>
+        {% endif %}
+      </div>
+      {% with share_url=request.build_absolute_uri share_text=post.title %}
+        {% include "include_share.html" %}
+      {% endwith %}
+    </div>
+  </section>
+</article>
+
+{% with content_type_id=content_type_id object_id=object_id %}
+  {% include "include_comments.html" %}
+{% endwith %}
+
+{% endblock %}
+
+{% block page_data %}{% endblock %}

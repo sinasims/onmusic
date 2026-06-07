@@ -1,0 +1,131 @@
+{% load music_extras %}<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>فاکتور #{{ order.id|persian_numbers }} | {{ site_config.logo_text|default:"نواهای بیکلام" }}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    @page { margin: 2cm; size: A4; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Vazirmatn', Tahoma, sans-serif;
+      font-size: 12px;
+      line-height: 1.8;
+      color: #1e293b;
+      background: #fff;
+      padding: 40px;
+    }
+    .invoice-box { max-width: 800px; margin: 0 auto; border: 1px solid #e2e8f0; border-radius: 12px; padding: 40px; }
+    .header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 30px; padding-bottom: 20px; border-bottom: 2px solid #7c3aed; }
+    .header .brand h1 { font-size: 22px; color: #7c3aed; margin-bottom: 4px; }
+    .header .brand p { color: #64748b; font-size: 11px; }
+    .header .badge { background: #7c3aed; color: #fff; padding: 6px 16px; border-radius: 20px; font-size: 11px; font-weight: bold; }
+    .info-row { display: flex; justify-content: space-between; margin-bottom: 20px; }
+    .info-box { flex: 1; }
+    .info-box h3 { font-size: 12px; color: #94a3b8; margin-bottom: 8px; letter-spacing: 1px; }
+    .info-box p { font-size: 13px; color: #1e293b; }
+    table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+    th { background: #f1f5f9; text-align: right; padding: 10px 12px; font-size: 11px; color: #475569; border-bottom: 2px solid #e2e8f0; }
+    td { padding: 10px 12px; border-bottom: 1px solid #f1f5f9; font-size: 12px; color: #334155; }
+    .total-row td { font-weight: 700; font-size: 14px; padding-top: 16px; border-top: 2px solid #7c3aed; border-bottom: none; }
+    .total-row td:last-child { color: #7c3aed; font-size: 16px; }
+    .footer { margin-top: 30px; padding-top: 20px; border-top: 1px solid #e2e8f0; text-align: center; color: #94a3b8; font-size: 11px; }
+    .print-btn { display: inline-block; margin-top: 20px; padding: 10px 30px; background: #7c3aed; color: #fff; border: none; border-radius: 8px; font-size: 14px; cursor: pointer; font-family: 'Vazirmatn', Tahoma, sans-serif; }
+    .print-btn:hover { background: #6d28d9; }
+    @media print {
+      .print-btn { display: none; }
+      body { padding: 0; }
+      .invoice-box { border: none; padding: 0; }
+      .no-print { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="invoice-box">
+    <div class="header">
+      <div class="brand">
+        <h1>{{ site_config.logo_text|default:"نواهای بیکلام" }}</h1>
+        <p>{{ site_config.footer_about|default:"فروشگاه موسیقی بیکلام" }}</p>
+      </div>
+      <div class="badge">فاکتور فروش</div>
+    </div>
+
+    <div class="info-row">
+      <div class="info-box">
+        <h3>شماره فاکتور</h3>
+        <p>{{ order.id|persian_numbers }}</p>
+      </div>
+      <div class="info-box">
+        <h3>تاریخ</h3>
+        <p>{{ order.created_at|to_jalali }}</p>
+      </div>
+      <div class="info-box">
+        <h3>کد پیگیری</h3>
+        <p dir="ltr">{{ order.ref_id|default:'—' }}</p>
+      </div>
+    </div>
+
+    <div class="info-row">
+      <div class="info-box">
+        <h3>خریدار</h3>
+        <p>{{ order.user.get_full_name|default:order.user.phone }}</p>
+        <p dir="ltr">{{ order.user.phone }}</p>
+        {% if order.user.email %}<p dir="ltr">{{ order.user.email }}</p>{% endif %}
+      </div>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th style="width:40px">#</th>
+          <th>آیتم</th>
+          <th>نوع</th>
+          <th style="width:100px">قیمت</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in order.items %}
+        <tr>
+          <td>{{ forloop.counter|persian_numbers }}</td>
+          <td>
+            {{ item.title }}
+            {% if item.artist %}<br><small style="color:#94a3b8">{{ item.artist }}</small>{% endif %}
+          </td>
+          <td>
+            {% if item.item_type == 'song' %}آهنگ
+            {% elif item.item_type == 'album' %}آلبوم
+            {% elif item.item_type == 'subscription' %}اشتراک
+            {% else %}—{% endif %}
+          </td>
+          <td>{{ item.price|default:0|price_fa }}</td>
+        </tr>
+        {% endfor %}
+        {% if order.coupon_code %}
+        <tr>
+          <td colspan="3" style="text-align:left;color:#059669">کد تخفیف: {{ order.coupon_code }}</td>
+          <td style="color:#059669">−{{ order.coupon_discount|price_fa }}</td>
+        </tr>
+        {% endif %}
+        <tr class="total-row">
+          <td colspan="3" style="text-align:left">جمع کل</td>
+          <td>{{ order.total|price_fa }}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="footer">
+      <p>{{ site_config.logo_text|default:"نواهای بیکلام" }} — {{ site_config.site_title|default:"onritm2.ir" }}</p>
+      <p>این فاکتور به صورت الکترونیکی صادر شده و معتبر می‌باشد.</p>
+    </div>
+  </div>
+
+  <div class="no-print" style="text-align:center">
+    <button class="print-btn" onclick="window.print()">چاپ فاکتور</button>
+    <br><br>
+    <a href="{% url 'profile' %}#orders" style="color:#7c3aed; font-size:12px;">بازگشت به پروفایل</a>
+  </div>
+</body>
+</html>

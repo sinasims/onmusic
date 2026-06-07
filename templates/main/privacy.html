@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% load music_extras %}
+
+{% block title %}حریم خصوصی | {{ site_config.logo_text|default:"نواهای بیکلام" }}{% endblock %}
+
+{% block content %}
+<section class="relative pt-32 pb-24 overflow-hidden">
+  <div class="absolute inset-0 bg-gradient-to-b from-slate-950 via-indigo-950/30 to-slate-950 z-0"></div>
+  <div class="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-16" data-aos="fade-up">
+      <h1 class="text-4xl md:text-5xl font-extrabold mb-4">حریم خصوصی</h1>
+    </div>
+    <div class="prose prose-invert max-w-none space-y-6 text-slate-300 leading-relaxed" data-aos="fade-up">
+      <div class="bg-white/5 border border-white/10 rounded-2xl p-6">
+        <h2 class="text-xl font-bold text-white mb-4">۱. اطلاعات جمع‌آوری شده</h2>
+        <p>ما تنها اطلاعاتی را جمع‌آوری می‌کنیم که شما داوطلبانه در اختیار ما قرار می‌دهید، شامل شماره موبایل، نام، ایمیل و نظرات.</p>
+      </div>
+      <div class="bg-white/5 border border-white/10 rounded-2xl p-6">
+        <h2 class="text-xl font-bold text-white mb-4">۲. استفاده از اطلاعات</h2>
+        <p>اطلاعات شما برای ارائه خدمات، پشتیبانی، اطلاع‌رسانی خریدها و بهبود تجربه کاربری استفاده می‌شود. اطلاعات شما تحت هیچ شرایطی به اشخاص ثالث فروخته نمی‌شود.</p>
+      </div>
+      <div class="bg-white/5 border border-white/10 rounded-2xl p-6">
+        <h2 class="text-xl font-bold text-white mb-4">۳. امنیت اطلاعات</h2>
+        <p>ما از پروتکل HTTPS و استانداردهای امنیتی برای محافظت از اطلاعات شما استفاده می‌کنیم. رمز عبورها به صورت رمزنگاری شده ذخیره می‌شوند.</p>
+      </div>
+      <div class="bg-white/5 border border-white/10 rounded-2xl p-6">
+        <h2 class="text-xl font-bold text-white mb-4">۴. کوکی‌ها</h2>
+        <p>از کوکی‌ها برای بهبود تجربه کاربری، ذخیره تنظیمات تم و مدیریت سبد خرید استفاده می‌شود. شما می‌توانید کوکی‌ها را در مرورگر خود غیرفعال کنید.</p>
+      </div>
+      <div class="bg-white/5 border border-white/10 rounded-2xl p-6">
+        <h2 class="text-xl font-bold text-white mb-4">۵. تماس با ما</h2>
+        <p>برای سوالات درباره حریم خصوصی، می‌توانید از طریق صفحه تماس با ما ارتباط برقرار کنید.</p>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

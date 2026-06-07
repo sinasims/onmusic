@@ -1,0 +1,158 @@
+{% load music_extras %}
+<section class="border-t border-white/5 pt-16 mt-16 pb-16">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-12" data-aos="fade-up">
+      <h2 class="text-2xl md:text-3xl font-bold mb-3">نظرات کاربران</h2>
+      <p class="text-slate-400">دیدگاه خود را درباره این محتوا بنویسید</p>
+    </div>
+
+    {% if comments %}
+    <div class="max-w-3xl mx-auto space-y-4 mb-12" id="commentsList">
+      {% for comment in comments %}
+      <div class="bg-white/5 border border-white/10 rounded-2xl p-5" data-aos="fade-up" data-comment-id="{{ comment.id }}">
+        <div class="flex items-start gap-3">
+          <div class="w-10 h-10 rounded-full bg-gradient-to-br from-purple-600 to-indigo-600 flex items-center justify-center text-white font-bold text-sm flex-shrink-0">{{ comment.name.0 }}</div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-2 flex-wrap mb-1">
+              <span class="font-bold text-sm">{{ comment.name }}</span>
+              <span class="text-xs text-slate-500">{{ comment.created_at|to_jalali }}</span>
+              {% if comment.rating %}
+              <span class="text-yellow-400 text-xs tracking-wider">{% for i in "12345"|make_list %}{% if forloop.counter <= comment.rating %}★{% endif %}{% endfor %}</span>
+              {% endif %}
+            </div>
+            <p class="text-slate-400 text-sm leading-relaxed">{{ comment.text }}</p>
+            <div class="flex items-center gap-4 mt-3 text-xs">
+              <button class="vote-btn flex items-center gap-1 text-slate-500 hover:text-emerald-400 transition-colors" data-comment-id="{{ comment.id }}" data-vote="1">
+                <i data-lucide="thumbs-up" class="w-3.5 h-3.5"></i>
+                <span class="vote-count up">{{ comment.likes }}</span>
+              </button>
+              <button class="vote-btn flex items-center gap-1 text-slate-500 hover:text-red-400 transition-colors" data-comment-id="{{ comment.id }}" data-vote="-1">
+                <i data-lucide="thumbs-down" class="w-3.5 h-3.5"></i>
+                <span class="vote-count down">{{ comment.dislikes }}</span>
+              </button>
+              <button class="reply-btn text-purple-400 hover:text-purple-300 transition-colors" data-comment-id="{{ comment.id }}" data-comment-name="{{ comment.name }}">پاسخ</button>
+            </div>
+            <!-- Nested replies -->
+            {% if comment.replies.all %}
+            <div class="mt-4 space-y-3 pr-4 border-r-2 border-white/10">
+              {% for reply in comment.replies.all %}
+              <div class="bg-white/3 rounded-xl p-4" data-comment-id="{{ reply.id }}">
+                <div class="flex items-start gap-3">
+                  <div class="w-8 h-8 rounded-full bg-gradient-to-br from-indigo-600 to-purple-600 flex items-center justify-center text-white font-bold text-xs flex-shrink-0">{{ reply.name.0 }}</div>
+                  <div class="flex-1 min-w-0">
+                    <div class="flex items-center gap-2 flex-wrap mb-1">
+                      <span class="font-bold text-xs">{{ reply.name }}</span>
+                      <span class="text-xs text-slate-500">{{ reply.created_at|to_jalali }}</span>
+                    </div>
+                    {% if reply.parent.name %}
+                    <p class="text-xs text-purple-400 mb-1">در پاسخ به {{ reply.parent.name }}</p>
+                    {% endif %}
+                    <p class="text-slate-400 text-sm leading-relaxed">{{ reply.text }}</p>
+                    <div class="flex items-center gap-4 mt-2 text-xs">
+                      <button class="vote-btn flex items-center gap-1 text-slate-500 hover:text-emerald-400 transition-colors" data-comment-id="{{ reply.id }}" data-vote="1">
+                        <i data-lucide="thumbs-up" class="w-3.5 h-3.5"></i>
+                        <span class="vote-count up">{{ reply.likes }}</span>
+                      </button>
+                      <button class="vote-btn flex items-center gap-1 text-slate-500 hover:text-red-400 transition-colors" data-comment-id="{{ reply.id }}" data-vote="-1">
+                        <i data-lucide="thumbs-down" class="w-3.5 h-3.5"></i>
+                        <span class="vote-count down">{{ reply.dislikes }}</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              {% endfor %}
+            </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <div class="text-center mb-12">
+      <i data-lucide="message-square" class="w-12 h-12 text-slate-600 mx-auto mb-3"></i>
+      <p class="text-slate-500">هنوز نظری ثبت نشده. اولین نفر باشید!</p>
+    </div>
+    {% endif %}
+
+    <div class="max-w-xl mx-auto bg-white/5 border border-white/10 rounded-2xl p-6" data-aos="fade-up">
+      <h3 class="text-lg font-bold mb-4" id="commentFormTitle">ثبت نظر</h3>
+      <p class="text-xs text-slate-500 mb-4 hidden" id="replyInfo">
+        در حال پاسخ به <span id="replyToName" class="text-purple-400"></span>
+        <button type="button" id="cancelReply" class="text-red-400 hover:text-red-300 mr-2">لغو</button>
+      </p>
+      <form id="commentForm" class="space-y-4">
+        <input type="hidden" name="content_type" value="{{ content_type_id }}">
+        <input type="hidden" name="object_id" value="{{ object_id }}">
+        <input type="hidden" name="parent_id" id="parentIdInput" value="">
+        <div>
+          <input type="text" name="name" placeholder="نام شما" required class="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:border-purple-500/50 transition-colors">
+        </div>
+        <div>
+          <textarea name="text" rows="3" placeholder="نظر شما..." required class="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:border-purple-500/50 transition-colors resize-none"></textarea>
+        </div>
+        <div>
+          <label class="text-sm text-slate-400 block mb-2">امتیاز:</label>
+          <div class="flex items-center gap-1" id="ratingStars">
+            {% for i in "12345"|make_list %}
+            <button type="button" data-star="{{ forloop.counter }}" class="star-btn text-2xl text-slate-600 hover:text-yellow-400 transition-colors">★</button>
+            {% endfor %}
+            <input type="hidden" name="rating" id="ratingInput" value="5">
+          </div>
+        </div>
+        <div id="captchaField" class="hidden">
+          <label class="text-sm text-slate-400 block mb-2">سوال امنیتی: <span id="captchaQuestion" class="text-purple-300"></span></label>
+          <input type="hidden" name="captcha_token" id="captchaToken">
+          <input type="text" id="captchaAnswer" placeholder="پاسخ..." required class="w-full px-4 py-2.5 rounded-xl bg-white/5 border border-white/10 text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:border-purple-500/50 transition-colors">
+        </div>
+        <button type="submit" class="w-full py-3 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-semibold hover:shadow-lg hover:shadow-purple-500/25 transition-all">ارسال نظر</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Reply button
+  document.querySelectorAll('.reply-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      const commentId = this.dataset.commentId;
+      const commentName = this.dataset.commentName;
+      document.getElementById('parentIdInput').value = commentId;
+      document.getElementById('replyToName').textContent = commentName;
+      document.getElementById('replyInfo').classList.remove('hidden');
+      document.getElementById('commentFormTitle').textContent = 'ارسال پاسخ';
+      document.getElementById('commentForm').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    });
+  });
+
+  // Cancel reply
+  document.getElementById('cancelReply')?.addEventListener('click', function() {
+    document.getElementById('parentIdInput').value = '';
+    document.getElementById('replyInfo').classList.add('hidden');
+    document.getElementById('commentFormTitle').textContent = 'ثبت نظر';
+  });
+
+  // Vote
+  document.querySelectorAll('.vote-btn').forEach(btn => {
+    btn.addEventListener('click', async function() {
+      const commentId = this.dataset.commentId;
+      const vote = parseInt(this.dataset.vote);
+      const resp = await fetch('/comment/vote/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'X-CSRFToken': getCookie('csrftoken') },
+        body: JSON.stringify({ comment_id: commentId, vote }),
+      });
+      const data = await resp.json();
+      if (data.success) {
+        const parent = this.closest('[data-comment-id]');
+        parent.querySelector('.vote-count.up').textContent = data.likes;
+        parent.querySelector('.vote-count.down').textContent = data.dislikes;
+      } else {
+        showToast(data.message, 'error');
+      }
+    });
+  });
+});
+</script>

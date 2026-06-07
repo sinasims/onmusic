@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+{% load music_extras %}
+
+{% block title %}تماس با ما | {{ site_config.logo_text|default:"نواهای بیکلام" }}{% endblock %}
+
+{% block content %}
+<section class="relative pt-32 pb-24 overflow-hidden">
+  <div class="absolute inset-0 bg-gradient-to-b from-slate-950 via-indigo-950/30 to-slate-950 z-0"></div>
+  <div class="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-16" data-aos="fade-up">
+      <h1 class="text-4xl md:text-5xl font-extrabold mb-4">تماس با ما</h1>
+      <p class="text-slate-400 max-w-xl mx-auto">برای ارتباط با تیم پشتیبانی، سوالات و پیشنهادات خود را با ما در میان بگذارید</p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-10" data-aos="fade-up">
+      <div>
+        <form method="post" class="space-y-5">
+          {% csrf_token %}
+          {% if error %}
+          <div class="px-4 py-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-sm">{{ error }}</div>
+          {% endif %}
+          {% if success %}
+          <div class="px-4 py-3 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-sm">{{ success }}</div>
+          {% endif %}
+          <div>
+            <label class="block text-xs text-slate-500 mb-1">نام <span class="text-red-400">*</span></label>
+            <input type="text" name="name" required class="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-slate-200 placeholder-slate-500 focus:outline-none focus:border-purple-500/50 transition-all text-sm">
+          </div>
+          <div>
+            <label class="block text-xs text-slate-500 mb-1">ایمیل</label>
+            <input type="email" name="email" class="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-slate-200 placeholder-slate-500 focus:outline-none focus:border-purple-500/50 transition-all text-sm">
+          </div>
+          <div>
+            <label class="block text-xs text-slate-500 mb-1">شماره تماس</label>
+            <input type="tel" name="phone" class="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-slate-200 placeholder-slate-500 focus:outline-none focus:border-purple-500/50 transition-all text-sm" dir="ltr">
+          </div>
+          <div>
+            <label class="block text-xs text-slate-500 mb-1">موضوع</label>
+            <input type="text" name="subject" class="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-slate-200 placeholder-slate-500 focus:outline-none focus:border-purple-500/50 transition-all text-sm">
+          </div>
+          <div>
+            <label class="block text-xs text-slate-500 mb-1">پیام <span class="text-red-400">*</span></label>
+            <textarea name="message" rows="5" required class="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-slate-200 placeholder-slate-500 focus:outline-none focus:border-purple-500/50 transition-all text-sm resize-y"></textarea>
+          </div>
+          <button type="submit" class="w-full py-3 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-semibold hover:shadow-lg hover:shadow-purple-500/25 transition-all">ارسال پیام</button>
+        </form>
+      </div>
+      <div class="space-y-6">
+        <div class="bg-white/5 border border-white/10 rounded-2xl p-6">
+          <h3 class="font-bold text-lg mb-4">اطلاعات تماس</h3>
+          <ul class="space-y-4">
+            {% if site_config.email %}
+            <li class="flex items-center gap-3 text-slate-300">
+              <div class="w-10 h-10 rounded-full bg-purple-600/20 flex items-center justify-center flex-shrink-0"><i data-lucide="mail" class="w-5 h-5 text-purple-400"></i></div>
+              <div><p class="text-sm font-medium">ایمیل</p><p class="text-xs text-slate-400" dir="ltr">{{ site_config.email }}</p></div>
+            </li>
+            {% endif %}
+            {% if site_config.phone %}
+            <li class="flex items-center gap-3 text-slate-300">
+              <div class="w-10 h-10 rounded-full bg-purple-600/20 flex items-center justify-center flex-shrink-0"><i data-lucide="phone" class="w-5 h-5 text-purple-400"></i></div>
+              <div><p class="text-sm font-medium">تلفن</p><p class="text-xs text-slate-400" dir="ltr">{{ site_config.phone }}</p></div>
+            </li>
+            {% endif %}
+            {% if site_config.address %}
+            <li class="flex items-center gap-3 text-slate-300">
+              <div class="w-10 h-10 rounded-full bg-purple-600/20 flex items-center justify-center flex-shrink-0"><i data-lucide="map-pin" class="w-5 h-5 text-purple-400"></i></div>
+              <div><p class="text-sm font-medium">آدرس</p><p class="text-xs text-slate-400">{{ site_config.address }}</p></div>
+            </li>
+            {% endif %}
+          </ul>
+        </div>
+        <div class="bg-white/5 border border-white/10 rounded-2xl p-6">
+          <h3 class="font-bold text-lg mb-4">ساعات پاسخگویی</h3>
+          {% if site_config.working_hours_weekdays %}
+          <p class="text-sm text-slate-400">{{ site_config.working_hours_weekdays }}</p>
+          {% else %}
+          <p class="text-sm text-slate-400">شنبه تا چهارشنبه: ۹ صبح تا ۱۸ عصر</p>
+          {% endif %}
+          {% if site_config.working_hours_friday %}
+          <p class="text-sm text-slate-400">{{ site_config.working_hours_friday }}</p>
+          {% else %}
+          <p class="text-sm text-slate-400">پنجشنبه: ۹ صبح تا ۱۴ ظهر</p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,15 @@
+<div class="flex items-center gap-2 justify-center md:justify-start mt-8" data-aos="fade-up">
+  <span class="text-xs text-slate-500 ml-1">اشتراک‌گذاری:</span>
+  <a href="https://t.me/share/url?url={{ share_url|urlencode }}&text={{ share_text }}" target="_blank" class="p-2 rounded-lg bg-sky-600/15 text-sky-400 hover:bg-sky-600/30 hover:text-sky-300 transition-all" title="تلگرام"><i data-lucide="send" class="w-4 h-4"></i></a>
+  <a href="https://twitter.com/intent/tweet?url={{ share_url|urlencode }}&text={{ share_text }}" target="_blank" class="p-2 rounded-lg bg-slate-600/15 text-slate-400 hover:bg-slate-600/30 hover:text-slate-300 transition-all" title="توییتر">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4"><path d="M4 4l11.733 16h4.267l-11.733 -16z"/><path d="M4 20l6.768 -6.768m2.46 -2.46L20 4"/></svg>
+  </a>
+  <a href="https://wa.me/?text={{ share_text }}%20{{ share_url|urlencode }}" target="_blank" class="p-2 rounded-lg bg-emerald-600/15 text-emerald-400 hover:bg-emerald-600/30 hover:text-emerald-300 transition-all" title="واتساپ"><i data-lucide="message-circle" class="w-4 h-4"></i></a>
+  <a href="https://www.facebook.com/sharer/sharer.php?u={{ share_url|urlencode }}" target="_blank" class="p-2 rounded-lg bg-blue-600/15 text-blue-400 hover:bg-blue-600/30 hover:text-blue-300 transition-all" title="فیسبوک">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+  </a>
+  <a href="https://www.linkedin.com/sharing/share-offsite/?url={{ share_url|urlencode }}" target="_blank" class="p-2 rounded-lg bg-blue-700/15 text-blue-500 hover:bg-blue-700/30 hover:text-blue-400 transition-all" title="لینکدین">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/></svg>
+  </a>
+  <button onclick="navigator.clipboard.writeText('{{ share_url|escapejs }}').then(()=>showToast('لینک کپی شد','success'))" class="p-2 rounded-lg bg-white/5 border border-white/10 text-slate-400 hover:bg-white/10 transition-all cursor-pointer" title="کپی لینک"><i data-lucide="link" class="w-4 h-4"></i></button>
+</div>

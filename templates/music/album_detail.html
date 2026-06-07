@@ -1,0 +1,229 @@
+{% extends "base.html" %}
+{% load static music_extras %}
+
+{% block title %}{{ album.title }} | آلبوم بیکلام {{ album.songs.count }} قطعه | نواهای بیکلام{% endblock %}
+{% block meta_description %}آلبوم بی‌کلام {{ album.title }} شامل {{ album.songs.count }} قطعه مانند {% for s in album.songs.all|slice:":5" %}{{ s.title }}{% if not forloop.last %}، {% endif %}{% endfor %} با کیفیت ۳۲۰ و تنظیم جدید آنریتم.{% endblock %}
+{% block meta_keywords %}{{ album.title }}, آلبوم بیکلام, آهنگ بیکلام, موسیقی بیکلام, دانلود آلبوم{% endblock %}
+{% block og_title %}{{ album.title }} | {{ album.songs.count }} قطعه بیکلام از {{ album.songs.first.artist.name|default:'هنرمندان مختلف' }}{% endblock %}
+{% block og_description %}خرید و دانلود آلبوم بیکلام {{ album.title }} با {{ album.songs.count }} قطعه با کیفیت استودیویی ۳۲۰. مناسب برای اجرای زنده، تمرین و تولید محتوا.{% endblock %}
+{% block og_image %}{{ album.cover }}{% endblock %}
+{% block twitter_image %}{{ album.cover }}{% endblock %}
+{% block og_type %}music.album{% endblock %}
+
+{% block schema %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "MusicAlbum",
+  "name": "{{ album.title }}",
+  "image": "{{ album.cover }}",
+  "description": "آلبوم بیکلام {{ album.title }} شامل {{ album.songs.count }} قطعه بازسازی شده توسط گروه آنریتم با کیفیت ۳۲۰",
+  "url": "{{ request.build_absolute_uri }}",
+  "numTracks": {{ album.songs.count }},
+  "genre": "Instrumental",
+  "datePublished": "{{ album.created_at|date:'c' }}",
+  "byArtist": {
+    "@type": "MusicGroup",
+    "name": "{{ album.songs.first.artist.name|default:'هنرمندان مختلف' }}"
+  },
+  "track": [
+    {% for song in album.songs.all %}
+    {
+      "@type": "MusicRecording",
+      "name": "{{ song.title }}",
+      "url": "{{ request.scheme }}://{{ request.get_host }}{% url 'song_detail' song.id %}",
+      "duration": "{{ song.duration|default:'PT0M' }}"
+    }{% if not forloop.last %},{% endif %}
+    {% endfor %}
+  ],
+  "offers": {
+    "@type": "Offer",
+    "price": "{{ album.price }}",
+    "priceCurrency": "IRR",
+    "availability": "https://schema.org/InStock"
+  }
+}
+</script>
+{% with schema_comments=comments|slice:":15" %}
+{% if schema_comments %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  "itemListElement": [
+    {% for comment in schema_comments %}
+    {
+      "@type": "Comment",
+      "@id": "#comment-{{ comment.id }}",
+      "author": {
+        "@type": "Person",
+        "name": "{{ comment.name|escapejs }}"
+      },
+      "dateCreated": "{{ comment.created_at|date:'c' }}",
+      "text": "{{ comment.text|truncatewords:50|escapejs }}"
+      {% if comment.rating %}
+      ,"reviewRating": {
+        "@type": "Rating",
+        "ratingValue": "{{ comment.rating }}",
+        "bestRating": "5"
+      }
+      {% endif %}
+    }{% if comment.replies.all %},
+    {% for reply in comment.replies.all %}
+    {
+      "@type": "Comment",
+      "author": {
+        "@type": "Person",
+        "name": "{{ reply.name|escapejs }}"
+      },
+      "dateCreated": "{{ reply.created_at|date:'c' }}",
+      "text": "{{ reply.text|truncatewords:50|escapejs }}",
+      "parentItem": {
+        "@id": "#comment-{{ comment.id }}"
+      }
+    }{% if not forloop.parentloop.last or not forloop.last %},{% endif %}
+    {% endfor %}
+    {% elif not forloop.last %},
+    {% endif %}
+    {% endfor %}
+  ]
+}
+</script>
+{% endif %}
+{% endwith %}
+{% endblock %}
+
+{% block content %}
+
+<section class="relative min-h-[50vh] flex items-center pt-24 overflow-hidden">
+  <div class="absolute inset-0 bg-gradient-to-b from-slate-950 via-emerald-950/30 to-slate-950 z-0"></div>
+  <div class="absolute top-1/3 left-1/2 -translate-x-1/2 w-[500px] h-[500px] rounded-full blur-[120px] bg-emerald-600/10 z-0"></div>
+  <div class="absolute inset-0 z-[1]">
+    <img src="{{ album.cover }}" alt="{{ album.title }}" class="w-full h-full object-cover opacity-10">
+  </div>
+  <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+    <nav class="flex items-center gap-1.5 text-xs text-slate-500 mb-4" aria-label="مسیر راهنما">
+      <a href="/" class="hover:text-purple-400 transition-colors flex items-center gap-1"><i data-lucide="home" class="w-3 h-3"></i></a>
+      <i data-lucide="chevron-left" class="w-3 h-3 text-slate-600"></i>
+      <a href="{% url 'album_list' %}" class="hover:text-purple-400 transition-colors">آلبوم‌ها</a>
+      <i data-lucide="chevron-left" class="w-3 h-3 text-slate-600"></i>
+      <span class="text-slate-300">{{ album.title }}</span>
+    </nav>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {"@type": "ListItem", "position": 1, "name": "خانه", "item": "{{ request.scheme }}://{{ request.get_host }}/"},
+        {"@type": "ListItem", "position": 2, "name": "آلبوم‌ها", "item": "{{ request.scheme }}://{{ request.get_host }}{% url 'album_list' %}"},
+        {"@type": "ListItem", "position": 3, "name": "{{ album.title }}", "item": "{{ request.build_absolute_uri }}"}
+      ]
+    }
+    </script>
+    <div class="flex flex-col md:flex-row items-center gap-10">
+      <div class="w-64 h-64 md:w-80 md:h-80 rounded-2xl overflow-hidden shadow-2xl shadow-emerald-500/20 ring-1 ring-white/10 flex-shrink-0" data-aos="fade-left">
+        <img src="{{ album.cover }}" alt="{{ album.title }}" class="w-full h-full object-cover">
+      </div>
+      <div class="flex-1 text-center md:text-right" data-aos="fade-right">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 text-xs text-slate-300 mb-4">
+          <i data-lucide="album" class="w-3 h-3 text-emerald-400"></i>آلبوم
+        </div>
+        <h1 class="text-3xl md:text-5xl font-extrabold mb-3">{{ album.title }}</h1>
+        <p class="text-slate-400 text-sm mb-6">آلبوم بی‌کلام {{ album.title }} شامل {{ album.songs.count }} قطعه بازسازی شده از اجراهای ماندگار با کیفیت استودیویی ۳۲۰. مناسب برای اجرای زنده و تمرین ساز.</p>
+        <div class="flex items-center justify-center md:justify-start gap-2 text-sm text-slate-500 mb-6">
+          <i data-lucide="music" class="w-4 h-4 text-emerald-400"></i>
+          <span>{{ album.songs.count }} قطعه</span>
+        </div>
+        <div class="flex flex-col sm:flex-row items-center gap-4">
+          {% if has_purchased %}
+          <a href="#songs" class="px-6 py-3 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-semibold hover:shadow-lg hover:shadow-emerald-500/25 transition-all hover:-translate-y-1 flex items-center gap-2">
+            <i data-lucide="download" class="w-5 h-5"></i>مشاهده و دانلود
+          </a>
+          {% else %}
+          <span class="text-3xl font-bold text-emerald-300">{{ album.price|price_format }}</span>
+          <button onclick="addToCartPackage({{ album.id }},'{{ album.title|escapejs }}','{{ album.cover|escapejs }}',{{ album.price }})" class="px-6 py-3 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-semibold hover:shadow-lg hover:shadow-emerald-500/25 transition-all hover:-translate-y-1 flex items-center gap-2">
+            <i data-lucide="shopping-cart" class="w-5 h-5"></i>افزودن به سبد خرید
+          </button>
+          {% endif %}
+        {% with share_url=request.build_absolute_uri share_text=album.title %}
+          {% include "include_share.html" %}
+        {% endwith %}
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Album description -->
+{% if album.description %}
+<section class="py-16 border-t border-white/5">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="max-w-3xl mx-auto">
+      <h2 class="text-2xl font-bold mb-6 text-center" data-aos="fade-up">درباره آلبوم {{ album.title }}</h2>
+      <div class="text-slate-300 text-sm leading-relaxed space-y-4" data-aos="fade-up">{{ album.description|linebreaks }}</div>
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<section id="songs" class="py-20 border-t border-white/5">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <h2 class="text-2xl md:text-3xl font-bold mb-10 text-center" data-aos="fade-up">قطعات آلبوم</h2>
+    <div class="max-w-3xl mx-auto space-y-3" data-aos="fade-up">
+      {% for song in album.songs.all %}
+      <div class="flex items-center gap-4 bg-white/5 border border-white/10 rounded-xl p-4 hover:bg-white/10 transition-colors group">
+        <div class="w-12 h-12 rounded-lg overflow-hidden flex-shrink-0">
+          <img src="{{ song.cover.url }}" alt="" class="w-full h-full object-cover">
+        </div>
+        <div class="flex-1 min-w-0">
+          <a href="{% url 'song_detail' song.id %}" class="font-bold text-sm hover:text-purple-400 transition-colors truncate block">{{ song.title }}</a>
+          <p class="text-xs text-slate-400">{{ song.artist.name }}</p>
+          <div class="flex items-center gap-2 text-xs text-slate-500 mt-1">
+            <span class="flex items-center gap-0.5"><i data-lucide="eye" class="w-3 h-3"></i>{{ song.views_count }}</span>
+            <span class="flex items-center gap-0.5"><i data-lucide="shopping-cart" class="w-3 h-3"></i>{{ song.purchase_count }}</span>
+          </div>
+        </div>
+        <span class="text-sm text-purple-300 font-medium">{{ song.price|price_format }}</span>
+        {% if has_purchased and song.arranged_audio %}
+        <button onclick="downloadArranged({{ song.id }})" class="p-2 rounded-lg bg-purple-600/20 text-purple-400 hover:bg-purple-600/30 transition-all" title="دانلود تنظیم جدید"><i data-lucide="download" class="w-4 h-4"></i></button>
+        {% endif %}
+        <button data-preview-url="{% if has_purchased and song.arranged_audio %}{% url 'download_song' song.id 'arranged' %}{% else %}{% if song.preview_url %}{{ song.preview_url.url }}{% endif %}{% endif %}" onclick="playPreview('{{ song.title|escapejs }}','{{ song.artist.name|escapejs }}','{{ song.cover.url|escapejs }}','{% if has_purchased and song.arranged_audio %}{% url 'download_song' song.id 'arranged' %}{% else %}{% if song.preview_url %}{{ song.preview_url.url|escapejs }}{% endif %}{% endif %}')" class="play-btn p-2 rounded-lg bg-white/5 border border-white/10 text-slate-400 hover:text-white hover:bg-white/10 transition-all">
+          <i data-lucide="play" class="play-icon w-4 h-4 fill-current"></i>
+        </button>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% if other_albums %}
+<section class="py-20 border-t border-white/5 bg-gradient-to-b from-slate-950 to-slate-900/50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <h2 class="text-2xl md:text-3xl font-bold mb-10 text-center" data-aos="fade-up">سایر آلبوم‌ها</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl mx-auto">
+      {% for a in other_albums %}
+      <a href="{% url 'album_detail' a.slug %}" class="group bg-white/5 border border-white/10 rounded-2xl overflow-hidden hover:-translate-y-1 transition-all duration-300 hover:shadow-2xl hover:shadow-emerald-500/10 card-glow" data-aos="fade-up">
+        <div class="relative aspect-video overflow-hidden">
+          <img src="{{ a.cover }}" alt="{{ a.title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy">
+          <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 to-transparent"></div>
+          <div class="absolute bottom-3 right-3">
+            <h3 class="text-lg font-bold text-white">{{ a.title }}</h3>
+            <p class="text-xs text-slate-300">{{ a.songs.count }} قطعه - {{ a.price|price_format }}</p>
+          </div>
+        </div>
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+{% with content_type_id=content_type_id object_id=object_id %}
+  {% include "include_comments.html" %}
+{% endwith %}
+
+{% endblock %}
+
+{% block page_data %}
+const hasSubscription = {{ has_subscription|yesno:"true,false" }};
+const purchasedSongIds = new Set({{ purchased_song_ids_json|safe }});
+{% endblock %}

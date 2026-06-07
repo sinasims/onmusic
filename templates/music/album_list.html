@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% load music_extras %}
+
+{% block title %}همه آلبوم‌ها | نواهای بیکلام{% endblock %}
+
+{% block content %}
+
+<section class="relative pt-32 pb-20 overflow-hidden">
+  <div class="absolute inset-0 bg-gradient-to-b from-slate-950 via-indigo-950/30 to-slate-950 z-0"></div>
+  <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+    <div data-aos="fade-up">
+      <h1 class="text-3xl md:text-5xl font-extrabold mb-4">همه آلبوم‌ها</h1>
+      <p class="text-slate-400 max-w-xl mx-auto">مجموعه‌های گردآوری شده از آهنگ‌های بیکلام</p>
+    </div>
+  </div>
+</section>
+
+<section class="pb-24">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div id="itemsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+      {% include 'music/_album_items.html' %}
+    </div>
+    <div id="listSkeleton" class="hidden grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+      {% include 'skeletons/album_skeleton.html' %}
+      {% include 'skeletons/album_skeleton.html' %}
+      {% include 'skeletons/album_skeleton.html' %}
+      {% include 'skeletons/album_skeleton.html' %}
+    </div>
+    <div id="listLoading" class="hidden text-center py-12">
+      <i data-lucide="loader" class="w-8 h-8 text-purple-400 mx-auto animate-spin"></i>
+    </div>
+    {% if not albums %}
+    <div class="text-center py-20">
+      <i data-lucide="album" class="w-16 h-16 text-slate-600 mx-auto mb-4"></i>
+      <p class="text-slate-400">هنوز آلبومی منتشر نشده است</p>
+    </div>
+    {% endif %}
+  </div>
+</section>
+
+{% endblock %}
+
+{% block page_data %}
+  window.listPage = { hasNext: {{ page_obj.has_next|lower }}, currentPage: {{ page_obj.number }}, totalPages: {{ page_obj.paginator.num_pages }} };
+{% endblock %}
